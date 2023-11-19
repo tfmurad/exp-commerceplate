@@ -160,7 +160,6 @@ const ShowProducts = async ({
                     : productsData?.products) || []
                 }
                 searchValue={searchValue}
-                searchParams={searchParams}
               />
             )}
           </div>

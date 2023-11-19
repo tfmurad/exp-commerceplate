@@ -20,7 +20,7 @@ export const getProductsQuery = /* GraphQL */ `
       sortKey: $sortKey
       reverse: $reverse
       query: $query
-      first: 3
+      first: 12
       after: $cursor
     ) {
       pageInfo {

@@ -1,14 +1,17 @@
 "use client";
 
 import Logo from "@/components/Logo";
+import Search from "@/components/Search";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import config from "@/config/config.json";
 import menu from "@/config/menu.json";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { Suspense, useEffect, useState } from "react";
+import { useCollapse } from "react-collapsed";
 import { BsPerson } from "react-icons/bs/index.js";
 import { IoSearch } from "react-icons/io5/index.js";
+import { TbZoomCancel } from "react-icons/tb";
 
 //  child navigation link interface
 export interface IChildNavigationLink {
@@ -25,6 +28,8 @@ export interface INavigationLink {
 }
 
 const Header = ({ children }: { children: any }) => {
+  const { getCollapseProps, getToggleProps, isExpanded, setExpanded } =
+    useCollapse();
   const [navbarShadow, setNavbarShadow] = useState(false);
   // distructuring the main menu from menu object
   const { main }: { main: INavigationLink[] } = menu;
@@ -61,8 +66,9 @@ const Header = ({ children }: { children: any }) => {
 
   return (
     <header
-      className={`header z-30 ${settings.sticky_header && "sticky top-0"} ${navbarShadow ? "shadow-sm" : "shadow-none"
-        }`}
+      className={`header z-30 ${settings.sticky_header && "sticky top-0"} ${
+        navbarShadow ? "shadow-sm" : "shadow-none"
+      }`}
     >
       <nav className="navbar container">
         {/* logo */}
@@ -108,15 +114,17 @@ const Header = ({ children }: { children: any }) => {
               {menu.hasChildren ? (
                 <li
                   onClick={handleChildMenuClick}
-                  className="nav-item nav-dropdown group relative">
+                  className="nav-item nav-dropdown group relative"
+                >
                   <span
-                    className={`nav-link inline-flex items-center ${menu.children?.map(({ url }) => url).includes(pathname) ||
-                        menu.children
-                          ?.map(({ url }) => `${url}/`)
-                          .includes(pathname)
+                    className={`nav-link inline-flex items-center ${
+                      menu.children?.map(({ url }) => url).includes(pathname) ||
+                      menu.children
+                        ?.map(({ url }) => `${url}/`)
+                        .includes(pathname)
                         ? "active"
                         : ""
-                      }`}
+                    }`}
                   >
                     {menu.name}
                     <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20">
@@ -124,17 +132,19 @@ const Header = ({ children }: { children: any }) => {
                     </svg>
                   </span>
                   <ul
-                    className={`nav-dropdown-list hidden lg:invisible lg:absolute lg:block lg:opacity-0 lg:group-hover:visible lg:group-hover:block lg:group-hover:opacity-100 ${showContent && "max-lg:block"
-                      }`}
+                    className={`nav-dropdown-list hidden lg:invisible lg:absolute lg:block lg:opacity-0 lg:group-hover:visible lg:group-hover:block lg:group-hover:opacity-100 ${
+                      showContent && "max-lg:block"
+                    }`}
                   >
                     {menu.children?.map((child, i) => (
                       <li className="nav-dropdown-item" key={`children-${i}`}>
                         <Link
                           href={child.url}
-                          className={`nav-dropdown-link block ${(pathname === `${child.url}/` ||
+                          className={`nav-dropdown-link block ${
+                            (pathname === `${child.url}/` ||
                               pathname === child.url) &&
                             "nav-active"
-                            }`}
+                          }`}
                         >
                           {child.name}
                         </Link>
@@ -146,9 +156,10 @@ const Header = ({ children }: { children: any }) => {
                 <li className="nav-item">
                   <Link
                     href={menu.url}
-                    className={`nav-link block ${(pathname === `${menu.url}/` || pathname === menu.url) &&
+                    className={`nav-link block ${
+                      (pathname === `${menu.url}/` || pathname === menu.url) &&
                       "nav-active"
-                      }`}
+                    }`}
                   >
                     {menu.name}
                   </Link>
@@ -157,7 +168,7 @@ const Header = ({ children }: { children: any }) => {
             </React.Fragment>
           ))}
           {navigation_button.enable && (
-            <li className="mt-4 inline-block lg:hidden">
+            <li className="mt-4 inline-block lg:hidden mr-4 md:mr-6">
               <Link
                 className="btn btn-outline-primary btn-sm"
                 href={navigation_button.link}
@@ -168,18 +179,39 @@ const Header = ({ children }: { children: any }) => {
           )}
         </ul>
 
-        <div className="order-1 ml-auto max-lg:mr-6 flex gap-4 md:gap-7 items-center md:order-2 lg:ml-0">
-          <ThemeSwitcher className="" />
+        <div className="order-1 ml-auto max-lg:mr-6 flex items-center md:order-2 lg:ml-0">
+          <ThemeSwitcher className="mr-4 md:mr-6" />
 
-          {settings.search && (
-            <Link className="search-icon" href="/search" aria-label="search">
+          {/* {settings.search && (
+            <Link className="search-icon mr-4 md:mr-6" href="/search" aria-label="search">
               <IoSearch size={20} />
             </Link>
+          )} */}
+
+          {settings.search && (
+            <div className=" flex items-center">
+              <button
+                className="search-icon mr-4 md:mr-6"
+                {...getToggleProps()}
+              >
+                {isExpanded ? (
+                  <TbZoomCancel size={20} />
+                ) : (
+                  <IoSearch size={20} />
+                )}
+              </button>
+              <section
+                className="w-full rounded-md absolute top-[55px] lg:top-[72px] left-0"
+                {...getCollapseProps()}
+              >
+                <Search />
+              </section>
+            </div>
           )}
 
           {settings.account && (
             <Link
-              className="text-xl text-dark hover:text-primary dark:border-darkmode-border dark:text-white"
+              className="text-xl text-dark hover:text-primary dark:border-darkmode-border dark:text-white mr-4 md:mr-6"
               href="/login"
               aria-label="login"
             >
@@ -187,9 +219,7 @@ const Header = ({ children }: { children: any }) => {
             </Link>
           )}
 
-          <Suspense fallback={children[0]}>
-            {children[1]}
-          </Suspense>
+          <Suspense fallback={children[0]}>{children[1]}</Suspense>
         </div>
       </nav>
     </header>

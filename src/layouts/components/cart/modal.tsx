@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import { DEFAULT_OPTION } from '@/lib/constants';
-import { Cart } from '@/lib/shopify/types';
-import { createUrl } from '@/lib/utils';
-import { Dialog, Transition } from '@headlessui/react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { Fragment, useEffect, useRef, useState } from 'react';
-import { FaShoppingCart } from 'react-icons/fa';
-import Price from '../price';
-import CloseCart from './close-cart';
-import { DeleteItemButton } from './delete-item-button';
-import { EditItemQuantityButton } from './edit-item-quantity-button';
-import OpenCart from './open-cart';
+import { DEFAULT_OPTION } from "@/lib/constants";
+import { Cart } from "@/lib/shopify/types";
+import { createUrl } from "@/lib/utils";
+import { Dialog, Transition } from "@headlessui/react";
+import Image from "next/image";
+import Link from "next/link";
+import { Fragment, useEffect, useRef, useState } from "react";
+import { FaShoppingCart } from "react-icons/fa";
+import Price from "../price";
+import CloseCart from "./close-cart";
+import { DeleteItemButton } from "./delete-item-button";
+import { EditItemQuantityButton } from "./edit-item-quantity-button";
+import OpenCart from "./open-cart";
 
 type MerchandiseSearchParams = {
   [key: string]: string;
@@ -64,7 +64,7 @@ export default function CartModal({ cart }: { cart: Cart | undefined }) {
             leaveFrom="translate-x-0"
             leaveTo="translate-x-full"
           >
-            <Dialog.Panel className="fixed bottom-0 right-0 top-0 flex h-full w-full flex-col border-l border-neutral-200 bg-white/80 p-6 text-black backdrop-blur-xl dark:border-neutral-700 dark:bg-black/80 dark:text-white md:w-[390px]">
+            <Dialog.Panel className="fixed bottom-0 right-0 top-0 flex h-full w-full flex-col border-l border-neutral-200 bg-body p-6 text-black backdrop-blur-xl dark:border-neutral-700 dark:bg-darkmode-body dark:text-white md:w-[390px]">
               <div className="flex items-center justify-between">
                 <p className="text-lg font-semibold">Your Cart</p>
 
@@ -73,7 +73,7 @@ export default function CartModal({ cart }: { cart: Cart | undefined }) {
                 </button>
               </div>
 
-              <div className='w-full h-px absolute bg-dark dark:bg-darkmode-dark left-0 top-16' />
+              <div className="w-full h-px absolute bg-dark dark:bg-darkmode-dark left-0 top-16" />
 
               {!cart || cart.lines.length === 0 ? (
                 <div className="flex flex-col justify-center items-center space-y-6 my-auto">
@@ -81,23 +81,28 @@ export default function CartModal({ cart }: { cart: Cart | undefined }) {
                     <FaShoppingCart size={76} />
                   </div>
                   <p>Your shopping bag is empty</p>
-                  <Link href={"/products"} className="btn btn-primary w-full">Continue Shopping</Link>
+                  <Link href={"/products"} className="btn btn-primary w-full">
+                    Continue Shopping
+                  </Link>
                 </div>
               ) : (
                 <div className="flex h-full flex-col justify-between overflow-hidden p-1">
                   <ul className="flex-grow overflow-auto py-4">
                     {cart.lines.map((item, i) => {
-                      const merchandiseSearchParams = {} as MerchandiseSearchParams;
+                      const merchandiseSearchParams =
+                        {} as MerchandiseSearchParams;
 
-                      item.merchandise.selectedOptions.forEach(({ name, value }) => {
-                        if (value !== DEFAULT_OPTION) {
-                          merchandiseSearchParams[name.toLowerCase()] = value;
-                        }
-                      });
+                      item.merchandise.selectedOptions.forEach(
+                        ({ name, value }) => {
+                          if (value !== DEFAULT_OPTION) {
+                            merchandiseSearchParams[name.toLowerCase()] = value;
+                          }
+                        },
+                      );
 
                       const merchandiseUrl = createUrl(
                         `/product/${item.merchandise.product.handle}`,
-                        new URLSearchParams(merchandiseSearchParams)
+                        new URLSearchParams(merchandiseSearchParams),
                       );
 
                       return (
@@ -120,10 +125,14 @@ export default function CartModal({ cart }: { cart: Cart | undefined }) {
                                   width={64}
                                   height={64}
                                   alt={
-                                    item.merchandise.product.featuredImage?.altText ||
+                                    item.merchandise.product.featuredImage
+                                      ?.altText ||
                                     item.merchandise.product.title
                                   }
-                                  src={item.merchandise.product.featuredImage?.url || "/images/product_image404.jpg"}
+                                  src={
+                                    item.merchandise.product.featuredImage
+                                      ?.url || "/images/product_image404.jpg"
+                                  }
                                 />
                               </div>
 
@@ -142,14 +151,24 @@ export default function CartModal({ cart }: { cart: Cart | undefined }) {
                               <Price
                                 className="flex justify-end space-y-2 text-right text-sm"
                                 amount={item.cost.totalAmount.amount}
-                                currencyCode={item.cost.totalAmount.currencyCode}
+                                currencyCode={
+                                  item.cost.totalAmount.currencyCode
+                                }
                               />
                               <div className="ml-auto flex h-9 flex-row items-center rounded-md border border-neutral-200 dark:border-neutral-700">
-                                <EditItemQuantityButton item={item} type="minus" />
+                                <EditItemQuantityButton
+                                  item={item}
+                                  type="minus"
+                                />
                                 <p className="w-6 text-center">
-                                  <span className="w-full text-sm">{item.quantity}</span>
+                                  <span className="w-full text-sm">
+                                    {item.quantity}
+                                  </span>
                                 </p>
-                                <EditItemQuantityButton item={item} type="plus" />
+                                <EditItemQuantityButton
+                                  item={item}
+                                  type="plus"
+                                />
                               </div>
                             </div>
                           </div>

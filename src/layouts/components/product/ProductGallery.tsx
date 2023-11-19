@@ -14,6 +14,8 @@ import "swiper/css/navigation";
 import "swiper/css/thumbs";
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import InnerImageZoom from 'react-inner-image-zoom';
+import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css';
 
 interface ImageItem {
   url: string;
@@ -80,30 +82,38 @@ const ProductGallery = ({ images }: { images: ImageItem[] }) => {
         >
           {images.map((item: any, index: number) => (
             <SwiperSlide key={item.url}>
-              <Image
+              {/* <Image
                 src={imageArray[activeIndex]?.url || item.url}
                 alt={item.altText}
                 width={722}
                 height={623}
                 className="mb-6 border rounded-md "
+              /> */}
+              <InnerImageZoom 
+               src={imageArray[activeIndex]?.url || item.url}
+              zoomSrc={imageArray[activeIndex]?.url || item.url} 
+              // alt={item.altText}
+              width={722}
+              height={623}
+              className="mb-6 border rounded-md "
               />
             </SwiperSlide>
           ))}
           <div
-            className={`hidden lg:flex justify-between w-full absolute top-1/2 -translate-y-1/2 z-10 px-6 text-dark ${isHovered
+            className={`hidden lg:block justify-between w-full absolute top-1/2 -translate-y-1/2 z-10 px-6 text-dark ${isHovered
               ? "opacity-100 transition-opacity duration-300 ease-in-out"
               : "opacity-0 transition-opacity duration-300 ease-in-out"
               }`}
           >
             <div
               ref={prevRef}
-              className="p-2 lg:p-4 rounded-md bg-body cursor-pointer shadow-sm"
+              className="p-2 lg:p-4 rounded-md bg-body cursor-pointer shadow-sm absolute left-4"
             >
               <HiOutlineArrowNarrowLeft size={24} />
             </div>
             <div
               ref={nextRef}
-              className="p-2 lg:p-4 rounded-md bg-body cursor-pointer shadow-sm"
+              className="p-2 lg:p-4 rounded-md bg-body cursor-pointer shadow-sm absolute right-4"
             >
               <HiOutlineArrowNarrowRight size={24} />
             </div>
