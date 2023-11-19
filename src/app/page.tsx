@@ -1,117 +1,99 @@
-import ImageFallback from "@/helpers/ImageFallback";
+/* eslint-disable react/no-unescaped-entities */
+import CategoriesSlider from "@/components/CategoriesSlider";
+import HeroSlider from "@/components/HeroSlider";
 import { getListPage } from "@/lib/contentParser";
-import { markdownify } from "@/lib/utils/textConverter";
+import { getCollectionProducts, getCollections } from "@/lib/shopify";
 import CallToAction from "@/partials/CallToAction";
+import LatestProducts from "@/partials/LatestProducts";
 import SeoMeta from "@/partials/SeoMeta";
-import Testimonials from "@/partials/Testimonials";
-import { Button, Feature } from "@/types";
-import { FaCheck } from "react-icons/fa/index.js";
+import { Suspense } from "react";
 
-const Home = () => {
-  const homepage = getListPage("homepage/_index.md");
-  const testimonial = getListPage("sections/testimonial.md");
+
+const ShowCategories = async () => {
+  const categories = await getCollections();
+  return <CategoriesSlider categories={categories} />
+}
+
+const ShowLatestProducts = async () => {
+  const { pageInfo, products } = await getCollectionProducts({ collection: "latest-products", reverse: false });
+  return <LatestProducts products={products} />
+}
+
+const Home = async () => {
   const callToAction = getListPage("sections/call-to-action.md");
-  const { frontmatter } = homepage;
-  const {
-    banner,
-    features,
-  }: {
-    banner: { title: string; image: string; content?: string; button?: Button };
-    features: Feature[];
-  } = frontmatter;
+  // const homepage = getListPage("homepage/_index.md");
+  // const { frontmatter } = homepage;
+  // const { banner }: { banner: Banner[]; } = frontmatter;
+
+  const sliderImages = await getCollectionProducts({ collection: "hidden-homepage-carousel" });
+  const { products } = sliderImages;
 
   return (
     <>
       <SeoMeta />
-      <section className="section pt-14">
+      <section>
         <div className="container">
-          <div className="row justify-center">
-            <div className="mb-16 text-center lg:col-7">
-              <h1
-                className="mb-4"
-                dangerouslySetInnerHTML={markdownify(banner.title)}
-              />
-              <p
-                className="mb-8"
-                dangerouslySetInnerHTML={markdownify(banner.content ?? "")}
-              />
-              {banner.button!.enable && (
-                <a className="btn btn-primary" href={banner.button!.link}>
-                  {banner.button!.label}
-                </a>
-              )}
-            </div>
-            {banner.image && (
-              <div className="col-12">
-                <ImageFallback
-                  src={banner.image}
-                  className="mx-auto"
-                  width="800"
-                  height="420"
-                  alt="banner image"
-                  priority
-                />
-              </div>
-            )}
+          <div className="bg-gradient py-10 rounded-md">
+            <HeroSlider products={products} />
           </div>
         </div>
       </section>
 
-      {features.map((feature, index: number) => (
-        <section
-          key={index}
-          className={`section-sm ${index % 2 === 0 && "bg-gradient"}`}
-        >
-          <div className="container">
-            <div className="row items-center justify-between">
-              <div
-                className={`mb:md-0 mb-6 md:col-5 ${
-                  index % 2 !== 0 && "md:order-2"
-                }`}
-              >
-                <ImageFallback
-                  src={feature.image}
-                  height={480}
-                  width={520}
-                  alt={feature.title}
-                />
-              </div>
-              <div
-                className={`md:col-7 lg:col-6 ${
-                  index % 2 !== 0 && "md:order-1"
-                }`}
-              >
-                <h2
-                  className="mb-4"
-                  dangerouslySetInnerHTML={markdownify(feature.title)}
-                />
-                <p
-                  className="mb-8 text-lg"
-                  dangerouslySetInnerHTML={markdownify(feature.content)}
-                />
-                <ul>
-                  {feature.bulletpoints.map((bullet: string) => (
-                    <li className="relative mb-4 pl-6" key={bullet}>
-                      <FaCheck className={"absolute left-0 top-1.5"} />
-                      <span dangerouslySetInnerHTML={markdownify(bullet)} />
-                    </li>
-                  ))}
-                </ul>
-                {feature.button.enable && (
-                  <a
-                    className="btn btn-primary mt-5"
-                    href={feature.button.link}
-                  >
-                    {feature.button.label}
-                  </a>
-                )}
-              </div>
-            </div>
+      {/* category section  */}
+      <section className="section">
+        <div className="container">
+          <div className="text-center mb-6 md:mb-14">
+            <h2>Categories</h2>
           </div>
-        </section>
-      ))}
+          {/* <CategoriesSlider categories={categories} /> */}
+          <Suspense
+            fallback={
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-x-6">
+                {Array(3)
+                  .fill(0)
+                  .map((_, index) => {
+                    return (
+                      <div key={index} className="h-[150px] md:h-[250px] lg:h-[306px] rounded-md animate-pulse bg-neutral-200 dark:bg-neutral-700" />
+                    );
+                  })}
+              </div>
+            }>
+            <ShowCategories />
+          </Suspense>
+        </div>
+      </section>
 
-      <Testimonials data={testimonial} />
+      {/* Latest Products section  */}
+      <section>
+        <div className="container">
+          <div className="text-center mb-6 md:mb-14">
+            <h2 className="mb-2">Latest Products</h2>
+            <p className="md:h5">Don't Miss Today's Latest Deals</p>
+          </div>
+          {/* <LatestProducts products={latestProducts} /> */}
+          <Suspense
+            fallback={
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {Array(8)
+                  .fill(0)
+                  .map((_, index) => {
+                    return (
+                      <div key={index}>
+                        <div className="h-[150px] md:h-[269px] rounded-md animate-pulse bg-neutral-200 dark:bg-neutral-700" />
+                        <div className="flex flex-col justify-center items-center">
+                          <div className="mt-4 w-24 h-3 rounded-full animate-pulse bg-neutral-200 dark:bg-neutral-700"></div>
+                          <div className="mt-2 w-16 h-2 rounded-full animate-pulse bg-neutral-200 dark:bg-neutral-700"></div>
+                        </div>
+                      </div>
+                    );
+                  })}
+              </div>
+            }>
+            <ShowLatestProducts />
+          </Suspense>
+        </div>
+      </section>
+
       <CallToAction data={callToAction} />
     </>
   );

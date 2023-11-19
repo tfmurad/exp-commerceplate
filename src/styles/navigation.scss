@@ -8,7 +8,7 @@ input#nav-toggle:checked + label #hide-button {
 }
 
 input#nav-toggle:checked ~ #nav-menu {
-  @apply block;
+  @apply block lg:flex;
 }
 
 .header {
@@ -32,11 +32,15 @@ input#nav-toggle:checked ~ #nav-menu {
 }
 
 // .nav-item {
-//   @apply mx-3;
+//   @apply text-light;
 // }
 
 .nav-link {
-  @apply block p-3 font-semibold text-dark transition hover:text-primary dark:text-darkmode-dark lg:px-2 lg:py-3;
+  @apply block p-3 font-medium transition text-light hover:text-dark dark:text-darkmode-text dark:hover:text-darkmode-primary lg:px-2 lg:py-3;
+}
+
+.nav-active {
+  @apply text-dark dark:text-darkmode-dark;
 }
 
 .nav-dropdown {
@@ -52,7 +56,7 @@ input#nav-toggle:checked ~ #nav-menu {
 }
 
 .nav-dropdown-link {
-  @apply block py-1 font-semibold text-dark transition hover:text-primary dark:text-darkmode-text dark:hover:text-darkmode-primary;
+  @apply block py-1 font-medium text-light transition hover:text-dark dark:text-darkmode-text dark:hover:text-darkmode-primary;
 }
 
 //theme-switcher
@@ -80,7 +84,7 @@ input#nav-toggle:checked ~ #nav-menu {
 
 // search style
 .search-icon {
-  @apply cursor-pointer p-2 text-xl text-dark hover:text-primary dark:text-darkmode-light;
+  @apply cursor-pointer transition text-light hover:text-dark dark:text-darkmode-text dark:hover:text-darkmode-primary;
 }
 
 .search-modal {
@@ -94,4 +98,9 @@ input#nav-toggle:checked ~ #nav-menu {
   &.open {
     @apply visible opacity-100;
   }
+}
+
+// footer items 
+.footer-link {
+  @apply text-sm md:text-base font-medium transition text-light hover:text-dark dark:text-darkmode-text dark:hover:text-darkmode-primary;
 }

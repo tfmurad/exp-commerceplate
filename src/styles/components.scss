@@ -1,6 +1,6 @@
 // section style
 .section {
-  @apply py-24 xl:py-28;
+  @apply py-14 xl:py-28;
   &-sm {
     @apply py-16 xl:py-20;
   }
@@ -9,15 +9,18 @@
 // container
 .container {
   @apply mx-auto max-w-[1320px] px-4;
+  &-lg {
+    @apply mx-auto max-w-[1640px] px-4;
+  }
 }
 
 // form style
 .form-input {
-  @apply w-full rounded border-transparent bg-theme-light px-6 py-4 text-dark placeholder:text-light focus:border-primary focus:ring-transparent dark:border-darkmode-border dark:bg-darkmode-theme-light dark:text-darkmode-light;
+  @apply w-full rounded border border-border bg-transparent px-3 py-2 md:px-6 md:py-4 text-dark placeholder:text-light focus:border-dark dark:focus:border-darkmode-dark focus:ring-transparent dark:border-darkmode-border dark:bg-darkmode-theme-light dark:text-darkmode-light;
 }
 
 .form-label {
-  @apply mb-4 block font-secondary text-xl font-normal text-dark dark:text-darkmode-light;
+  @apply mb-2 block font-secondary text-xl max-md:text-base font-normal text-dark dark:text-darkmode-light;
 }
 
 // social icons
@@ -26,7 +29,7 @@
   li {
     @apply inline-block;
     a {
-      @apply flex h-9 w-9 items-center justify-center rounded bg-primary text-center leading-9 text-white dark:bg-darkmode-primary dark:text-dark;
+      @apply flex h-6 w-6 p-1 md:h-9 md:w-9 items-center justify-center rounded-full bg-white hover:bg-primary hover:text-white duration-300 text-center leading-9 text-primary border border-primary dark:border-white dark:bg-darkmode-theme-light dark:text-white dark:hover:bg-white dark:hover:text-black;
       svg {
         @apply h-5 w-5;
       }
@@ -77,39 +80,52 @@
 // swiper pagination
 .swiper-pagination {
   @apply mt-9 flex items-center justify-center space-x-2 text-center;
-  &-bullet {
-    @apply h-2.5 w-2.5 rounded-full bg-theme-light opacity-100 dark:bg-darkmode-theme-light;
-
-    &-active {
-      @apply h-4 w-4 bg-primary dark:bg-darkmode-primary;
-    }
-  }
 }
+
+.banner-pagination-bullet {
+  @apply cursor-pointer h-2.5 w-2.5 rounded-full bg-swiper-bullet opacity-100 dark:bg-swiper-bullet;
+}
+
+.banner-pagination-bullet-active {
+  @apply h-2.5 w-5 bg-theme-dark dark:bg-darkmode-primary duration-200;
+}
+
+.swiper-button-disabled {
+  @apply opacity-50;
+}
+
+// .swiper{
+//   @apply invisible
+// }
+
+// .swiper-initialized{
+//   @apply visible
+// }
 
 // tab
 .tab {
-  @apply overflow-hidden rounded-lg border border-border dark:border-darkmode-border;
+  @apply overflow-hidden;
   &-nav {
-    @apply flex border-b border-border bg-theme-light dark:border-darkmode-border dark:bg-darkmode-theme-light;
+    @apply flex;
     @apply m-0 #{!important};
     @apply list-none #{!important};
 
     &-item {
-      @apply cursor-pointer border-b-[3px] border-border py-2 text-lg text-dark opacity-80 dark:border-light;
+      @apply cursor-pointer border-b py-2 text-lg text-dark dark:text-darkmode-light opacity-80 dark:border-darkmode-primary;
       @apply my-0 #{!important};
       @apply px-8 #{!important};
 
       &.active {
-        @apply border-b-[3px] border-dark opacity-100 dark:border-darkmode-primary;
+        @apply border border-b-0 border-border rounded-tr-lg rounded-tl-lg opacity-100 dark:border-darkmode-primary;
       }
     }
   }
   &-content {
-    @apply px-5;
+    @apply p-5;
     &-panel {
       @apply p-8;
       p {
-        @apply mb-0;
+        @apply m-0;
       }
       &.active {
         @apply block;
@@ -120,17 +136,20 @@
 
 // accordion
 .accordion {
-  @apply mb-6 overflow-hidden rounded-lg border border-border bg-theme-light dark:border-darkmode-border dark:bg-darkmode-theme-light;
+  @apply overflow-hidden border-b-2 border-border bg-theme-light dark:border-darkmode-border dark:bg-darkmode-theme-light;
   &-header {
-    @apply flex w-full cursor-pointer items-center justify-between px-8 py-4 text-lg text-dark dark:bg-darkmode-theme-light dark:text-darkmode-light;
+    @apply flex w-full cursor-pointer items-center justify-between px-0 py-3 text-lg text-light dark:bg-darkmode-theme-light dark:text-darkmode-light text-start;
   }
   &-icon {
     @apply h-[.8em] w-[.8em] rotate-[-90deg] transition-transform duration-200;
   }
   &-content {
-    @apply max-h-0 overflow-hidden px-8 py-0;
+    @apply max-h-0 overflow-hidden px-0 py-0;
   }
   &.active {
+    .accordion-header {
+      @apply text-dark dark:text-darkmode-primary font-medium;
+    }
     .accordion-icon {
       @apply rotate-0;
     }
@@ -138,26 +157,46 @@
       @apply max-h-screen;
     }
   }
+  &:last-child {
+    @apply border-b-0;
+  }
 }
 
-// modal
+// modal product filter
 .modal {
-  @apply fixed inset-0 z-40 hidden h-full w-full overflow-auto;
+  @apply fixed inset-0 bg-dark bg-opacity-25 backdrop-blur-sm overflow-y-auto z-50;
   &-overlay {
-    @apply fixed inset-0 z-40 hidden h-full w-full bg-black bg-opacity-40;
+    @apply fixed inset-0 z-40 hidden h-full w-full bg-opacity-40;
   }
   &-content {
-    @apply relative top-1/2 z-50 mx-auto max-w-[90%] -translate-y-1/2 rounded-lg bg-body p-8 dark:bg-darkmode-body;
+    @apply relative top-1/2 z-50 mx-auto max-w-[90%] translate-y-14 rounded-lg bg-body p-8 dark:bg-darkmode-body;
   }
   &-close {
     @apply absolute right-3 top-3 h-8 w-8 rounded-full bg-theme-light text-center leading-8 text-dark dark:bg-darkmode-theme-light dark:text-darkmode-dark;
   }
 }
 
+// modal cart
+.modalCart {
+  @apply fixed inset-0 bg-dark bg-opacity-25 backdrop-blur-sm overflow-y-auto z-40;
+  &-overlay {
+    @apply fixed inset-0 z-40 hidden h-full w-full bg-opacity-40;
+  }
+  &-header {
+    @apply flex justify-between items-center relative ml-auto z-50 w-full md:max-w-[50%] lg:max-w-[30%] bg-body border-b-2 p-8 pb-4 dark:bg-darkmode-body;
+  }
+  &-content {
+    @apply relative ml-auto z-50 w-full md:max-w-[50%] lg:max-w-[30%] rounded-bl-md bg-body p-8 dark:bg-darkmode-body py-36;
+  }
+  &-close {
+    @apply rounded-full p-2 text-dark  dark:text-darkmode-dark;
+  }
+}
+
 // content style
 .content {
   @apply prose max-w-none;
-  @apply prose-headings:mb-[.3em] prose-headings:mt-[.6em];
+  @apply prose-headings:mb-[0.6em] prose-headings:mt-[0.6em];
   @apply prose-h1:text-h1-sm md:prose-h1:text-h1;
   @apply prose-h2:text-h2-sm md:prose-h2:text-h2;
   @apply prose-h3:text-h3-sm md:prose-h3:text-h3;

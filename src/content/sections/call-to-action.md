@@ -1,10 +1,10 @@
 ---
 enable: true
-title: "Ready to build your next project with Next?"
+title: "Subscribe To Our Email And Get 25% Off"
 image: "/images/call-to-action.png"
-description: "Experience the future of web development with Nextplate and Next. Build lightning-fast static sites with ease and flexibility."
+description: "Subscribe our Newsletter and get all latest information and offers"
 button:
   enable: true
-  label: "Get Started Now"
+  label: "Subscribe"
   link: "https://github.com/zeon-studio/nextplate"
 ---

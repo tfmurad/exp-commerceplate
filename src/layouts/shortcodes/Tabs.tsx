@@ -38,7 +38,7 @@ function Tabs({ children }: { children: ReactElement[] }) {
 
   return (
     <div className="tab">
-      <ul className="tab-nav" role="tablist">
+      <ul className="tab-nav border-0" role="tablist">
         {children.map((item: ReactElement, index: number) => (
           <li
             key={index}

@@ -81,18 +81,25 @@ const Pagination = ({
                   {pagination}
                 </span>
               ) : (
-                <Link
-                  href={
-                    i === 0
-                      ? `${section ? "/" + section : "/"}`
-                      : `${section ? "/" + section : ""}/page/${pagination}`
-                  }
-                  passHref
-                  aria-current="page"
-                  className="rounded px-4 py-2 text-dark hover:bg-theme-light dark:text-darkmode-dark dark:hover:bg-darkmode-theme-light"
-                >
-                  {pagination}
-                </Link>
+                // Check if the page should be displayed with ellipsis
+                i === 0 && currentPage - i > 2 ? (
+                  <span>...</span>
+                ) : i === totalPages - 1 && totalPages - currentPage > 2 ? (
+                  <span>...</span>
+                ) : i === currentPage - 2 || i === currentPage - 1 || i === currentPage || i === currentPage + 1 || i === currentPage + 2 ? (
+                  <Link
+                    href={
+                      i === 0
+                        ? `${section ? "/" + section : "/"}`
+                        : `${section ? "/" + section : ""}/page/${pagination}`
+                    }
+                    passHref
+                    aria-current="page"
+                    className="rounded px-4 py-2 text-dark hover:bg-theme-light dark:text-darkmode-dark dark:hover:bg-darkmode-theme-light"
+                  >
+                    {pagination}
+                  </Link>
+                ) : null
               )}
             </React.Fragment>
           ))}
@@ -101,7 +108,7 @@ const Pagination = ({
           {hasNextPage ? (
             <Link
               href={`${section ? "/" + section : ""}/page/${currentPage + 1}`}
-              className="rounded px-2 py-1.5 text-dark hover:bg-theme-light dark:text-darkmode-dark dark:hover:bg-darkmode-theme-light"
+              className="rounded px-2 py-1.5 text-dark hover.bg-theme-light dark:text-darkmode-dark dark:hover.bg-darkmode-theme-light"
             >
               <span className="sr-only">Next</span>
               <svg

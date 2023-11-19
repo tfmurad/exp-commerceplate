@@ -1,23 +1,29 @@
 {
   "site": {
-    "title": "Nextplate",
+    "title": "Commerceplate",
     "base_url": "https://nextplate.netlify.app",
     "base_path": "/",
     "trailing_slash": false,
     "favicon": "/images/favicon.png",
-    "logo": "/images/logo.png",
-    "logo_darkmode": "/images/logo-darkmode.png",
-    "logo_width": "150",
-    "logo_height": "27",
-    "logo_text": "Nextplate"
+    "logo": "/images/logo_icon.png",
+    "logo_darkmode": "/images/logo_icon_darkmode.png",
+    "logo_icon": "/images/logo_icon.png",
+    "logo_icon_darkmode": "/images/logo_icon_darkmode.png",
+    "logo_width": "22",
+    "logo_height": "25",
+    "logo_text": "CommercePlate"
   },
 
   "settings": {
     "search": true,
+    "account": true,
+    "cart": true,
+    "currency": true,
     "sticky_header": true,
     "theme_switcher": true,
     "default_theme": "system",
-    "pagination": 2,
+    "pagination_card": 9,
+    "pagination_list": 4,
     "summary_length": 200,
     "blog_folder": "blog"
   },

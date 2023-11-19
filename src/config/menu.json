@@ -5,12 +5,8 @@
       "url": "/"
     },
     {
-      "name": "About",
-      "url": "/about"
-    },
-    {
-      "name": "Elements",
-      "url": "/elements"
+      "name": "Products",
+      "url": "/products"
     },
     {
       "name": "Pages",
@@ -18,40 +14,46 @@
       "hasChildren": true,
       "children": [
         {
+          "name": "About",
+          "url": "/about"
+        },
+        {
           "name": "Contact",
           "url": "/contact"
-        },
-        {
-          "name": "Blog",
-          "url": "/blog"
-        },
-        {
-          "name": "Authors",
-          "url": "/authors"
-        },
-        {
-          "name": "Categories",
-          "url": "/categories"
-        },
-        {
-          "name": "Search",
-          "url": "/search"
         },
         {
           "name": "404 Page",
           "url": "/404"
         }
       ]
+    },
+    {
+      "name": "Contact",
+      "url": "/contact"
     }
   ],
   "footer": [
     {
-      "name": "Elements",
-      "url": "/elements"
+      "name": "About",
+      "url": "/about"
     },
     {
-      "name": "Privacy Policy",
+      "name": "Products",
+      "url": "/products"
+    },
+    {
+      "name": "Contact",
+      "url": "/contact"
+    }
+  ],
+  "footerCopyright": [
+    {
+      "name": "Privacy & Policy",
       "url": "/privacy-policy"
+    },
+    {
+      "name": "Terms of Service",
+      "url": "/terms-services"
     }
   ]
 }

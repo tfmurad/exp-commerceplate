@@ -14,27 +14,32 @@ const Footer = () => {
   return (
     <footer className="bg-theme-light dark:bg-darkmode-theme-light">
       <div className="container">
-        <div className="row items-center py-10">
-          <div className="mb-8 text-center lg:col-3 lg:mb-0 lg:text-left">
-            <Logo />
-          </div>
-          <div className="mb-8 text-center lg:col-6 lg:mb-0">
-            <ul>
-              {menu.footer.map((menu) => (
-                <li className="m-3 inline-block" key={menu.name}>
+        <div className="flex flex-col md:flex-row justify-between items-center py-10 md:pt-20 md:pb-14">
+          <Logo />
+
+          <ul className="flex gap-x-4 lg:gap-x-10 my-3">
+            {menu.footer.map((menu) => (
+              <li className="footer-link" key={menu.name}>
+                <Link href={menu.url}>{menu.name}</Link>
+              </li>
+            ))}
+          </ul>
+
+          <Social source={social.main} className="social-icons" />
+        </div>
+
+        <div className="border-t border-border py-5 dark:border-darkmode-border">
+          <div className="flex flex-col md:flex-row gap-y-2 justify-between items-center text-light dark:text-darkmode-light">
+            <ul className="flex gap-x-4">
+              {menu.footerCopyright.map((menu) => (
+                <li className="footer-link" key={menu.name}>
                   <Link href={menu.url}>{menu.name}</Link>
                 </li>
               ))}
             </ul>
+
+            <p className="text-sm font-light" dangerouslySetInnerHTML={markdownify(copyright)} />
           </div>
-          <div className="mb-8 text-center lg:col-3 lg:mb-0 lg:mt-0 lg:text-right">
-            <Social source={social.main} className="social-icons" />
-          </div>
-        </div>
-      </div>
-      <div className="border-t border-border py-7 dark:border-darkmode-border">
-        <div className="container text-center text-light dark:text-darkmode-light">
-          <p dangerouslySetInnerHTML={markdownify(copyright)} />
         </div>
       </div>
     </footer>

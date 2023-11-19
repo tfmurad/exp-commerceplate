@@ -1,5 +1,6 @@
 import MDXContent from "@/helpers/MDXContent";
-import { getSinglePage } from "@/lib/contentParser";
+import { getListPage, getSinglePage } from "@/lib/contentParser";
+import CallToAction from "@/partials/CallToAction";
 import PageHeader from "@/partials/PageHeader";
 import SeoMeta from "@/partials/SeoMeta";
 import { RegularPage } from "@/types";
@@ -26,6 +27,7 @@ const RegularPages = ({ params }: { params: { regular: string } }) => {
   )[0];
   const { frontmatter, content } = data;
   const { title, meta_title, description, image } = frontmatter;
+  const callToAction = getListPage("sections/call-to-action.md");
 
   return (
     <>
@@ -36,13 +38,14 @@ const RegularPages = ({ params }: { params: { regular: string } }) => {
         image={image}
       />
       <PageHeader title={title} />
-      <section className="section">
+      <section className="pt-8 xl:pt-16">
         <div className="container">
           <div className="content">
             <MDXContent content={content} />
           </div>
         </div>
       </section>
+      <CallToAction data={callToAction} />
     </>
   );
 };

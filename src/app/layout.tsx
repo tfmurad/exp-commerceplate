@@ -1,3 +1,5 @@
+import Cart from "@/components/cart";
+import OpenCart from "@/components/cart/open-cart";
 import config from "@/config/config.json";
 import theme from "@/config/theme.json";
 import TwSizeIndicator from "@/helpers/TwSizeIndicator";
@@ -27,7 +29,7 @@ export default function RootLayout({
         {/* favicon */}
         <link rel="shortcut icon" href={config.site.favicon} />
         {/* theme meta */}
-        <meta name="theme-name" content="nextplate" />
+        <meta name="theme-name" content="commerceplate" />
         <meta name="msapplication-TileColor" content="#000000" />
         <meta
           name="theme-color"
@@ -47,17 +49,19 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         <link
-          href={`https://fonts.googleapis.com/css2?family=${pf}${
-            sf ? "&family=" + sf : ""
-          }&display=swap`}
+          href={`https://fonts.googleapis.com/css2?family=${pf}${sf ? "&family=" + sf : ""
+            }&display=swap`}
           rel="stylesheet"
         />
       </head>
 
-      <body suppressHydrationWarning={true}>
+      <body suppressHydrationWarning={true} className=" selection:bg-gray-300 dark:selection:bg-gray-300 dark:selection:text-dark">
         <TwSizeIndicator />
         <Providers>
-          <Header />
+          <Header>
+            <OpenCart />
+            <Cart />
+          </Header>
           <main>{children}</main>
           <Footer />
         </Providers>

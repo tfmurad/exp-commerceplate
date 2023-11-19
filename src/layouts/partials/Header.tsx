@@ -6,7 +6,8 @@ import config from "@/config/config.json";
 import menu from "@/config/menu.json";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { Suspense, useEffect, useState } from "react";
+import { BsPerson } from "react-icons/bs/index.js";
 import { IoSearch } from "react-icons/io5/index.js";
 
 //  child navigation link interface
@@ -23,7 +24,8 @@ export interface INavigationLink {
   children?: IChildNavigationLink[];
 }
 
-const Header = () => {
+const Header = ({ children }: { children: any }) => {
+  const [navbarShadow, setNavbarShadow] = useState(false);
   // distructuring the main menu from menu object
   const { main }: { main: INavigationLink[] } = menu;
   const { navigation_button, settings } = config;
@@ -35,24 +37,48 @@ const Header = () => {
     window.scroll(0, 0);
   }, [pathname]);
 
+  // shadow on scroll down
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setNavbarShadow(true);
+      } else {
+        setNavbarShadow(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const [showContent, setShowContent] = useState(false);
+
+  const handleChildMenuClick = () => {
+    setShowContent(!showContent);
+  };
+
   return (
     <header
-      className={`header z-30 ${settings.sticky_header && "sticky top-0"}`}
+      className={`header z-30 ${settings.sticky_header && "sticky top-0"} ${navbarShadow ? "shadow-sm" : "shadow-none"
+        }`}
     >
       <nav className="navbar container">
         {/* logo */}
-        <div className="order-0">
+        <div className="order-0 flex items-center">
           <Logo />
         </div>
+
         {/* navbar toggler */}
         <input id="nav-toggle" type="checkbox" className="hidden" />
         <label
           htmlFor="nav-toggle"
-          className="order-3 cursor-pointer flex items-center lg:hidden text-dark dark:text-white lg:order-1"
+          className="order-3 cursor-pointer flex items-center lg:hidden text-dark dark:text-white lg:order-1 border-2 p-1 rounded-md"
         >
           <svg
             id="show-button"
-            className="h-6 fill-current block"
+            className="h-5 fill-current block"
             viewBox="0 0 20 20"
           >
             <title>Menu Open</title>
@@ -60,7 +86,7 @@ const Header = () => {
           </svg>
           <svg
             id="hide-button"
-            className="h-6 fill-current hidden"
+            className="h-5 fill-current hidden"
             viewBox="0 0 20 20"
           >
             <title>Menu Close</title>
@@ -72,6 +98,7 @@ const Header = () => {
         </label>
         {/* /navbar toggler */}
 
+        {/* header menu items */}
         <ul
           id="nav-menu"
           className="navbar-nav order-3 hidden w-full pb-6 lg:order-1 lg:flex lg:w-auto lg:space-x-2 lg:pb-0 xl:space-x-8"
@@ -79,32 +106,35 @@ const Header = () => {
           {main.map((menu, i) => (
             <React.Fragment key={`menu-${i}`}>
               {menu.hasChildren ? (
-                <li className="nav-item nav-dropdown group relative">
+                <li
+                  onClick={handleChildMenuClick}
+                  className="nav-item nav-dropdown group relative">
                   <span
-                    className={`nav-link inline-flex items-center ${
-                      menu.children?.map(({ url }) => url).includes(pathname) ||
-                      menu.children
-                        ?.map(({ url }) => `${url}/`)
-                        .includes(pathname)
+                    className={`nav-link inline-flex items-center ${menu.children?.map(({ url }) => url).includes(pathname) ||
+                        menu.children
+                          ?.map(({ url }) => `${url}/`)
+                          .includes(pathname)
                         ? "active"
                         : ""
-                    }`}
+                      }`}
                   >
                     {menu.name}
                     <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20">
                       <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                     </svg>
                   </span>
-                  <ul className="nav-dropdown-list hidden group-hover:block lg:invisible lg:absolute lg:block lg:opacity-0 lg:group-hover:visible lg:group-hover:opacity-100">
+                  <ul
+                    className={`nav-dropdown-list hidden lg:invisible lg:absolute lg:block lg:opacity-0 lg:group-hover:visible lg:group-hover:block lg:group-hover:opacity-100 ${showContent && "max-lg:block"
+                      }`}
+                  >
                     {menu.children?.map((child, i) => (
                       <li className="nav-dropdown-item" key={`children-${i}`}>
                         <Link
                           href={child.url}
-                          className={`nav-dropdown-link block ${
-                            (pathname === `${child.url}/` ||
+                          className={`nav-dropdown-link block ${(pathname === `${child.url}/` ||
                               pathname === child.url) &&
-                            "active"
-                          }`}
+                            "nav-active"
+                            }`}
                         >
                           {child.name}
                         </Link>
@@ -116,10 +146,9 @@ const Header = () => {
                 <li className="nav-item">
                   <Link
                     href={menu.url}
-                    className={`nav-link block ${
-                      (pathname === `${menu.url}/` || pathname === menu.url) &&
-                      "active"
-                    }`}
+                    className={`nav-link block ${(pathname === `${menu.url}/` || pathname === menu.url) &&
+                      "nav-active"
+                      }`}
                   >
                     {menu.name}
                   </Link>
@@ -138,25 +167,29 @@ const Header = () => {
             </li>
           )}
         </ul>
-        <div className="order-1 ml-auto flex items-center md:order-2 lg:ml-0">
+
+        <div className="order-1 ml-auto max-lg:mr-6 flex gap-4 md:gap-7 items-center md:order-2 lg:ml-0">
+          <ThemeSwitcher className="" />
+
           {settings.search && (
-            <Link
-              className="mr-5 inline-block border-r border-border pr-5 text-xl text-dark hover:text-primary dark:border-darkmode-border dark:text-white"
-              href="/search"
-              aria-label="search"
-            >
-              <IoSearch />
+            <Link className="search-icon" href="/search" aria-label="search">
+              <IoSearch size={20} />
             </Link>
           )}
-          <ThemeSwitcher className="mr-5" />
-          {navigation_button.enable && (
+
+          {settings.account && (
             <Link
-              className="btn btn-outline-primary btn-sm hidden lg:inline-block"
-              href={navigation_button.link}
+              className="text-xl text-dark hover:text-primary dark:border-darkmode-border dark:text-white"
+              href="/login"
+              aria-label="login"
             >
-              {navigation_button.label}
+              <BsPerson />
             </Link>
           )}
+
+          <Suspense fallback={children[0]}>
+            {children[1]}
+          </Suspense>
         </div>
       </nav>
     </header>

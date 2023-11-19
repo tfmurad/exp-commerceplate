@@ -11,7 +11,7 @@ const AuthorCard = ({ data }: { data: any }) => {
         <ImageFallback
           className="mx-auto mb-6 rounded"
           src={image}
-          alt={title}
+          alt={title} 
           width={120}
           height={120}
         />

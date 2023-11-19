@@ -6,9 +6,27 @@ export type RegularPage = {
     meta_title?: string;
     layout?: string;
     draft?: boolean;
+    about_us?: AboutUsItem[]; 
+    contact_meta?: ContactUsItem[];
   };
   content: string;
   slug?: string;
+};
+
+export type AboutUsItem = {
+  image: string;
+  content: string;
+  heading: string;
+}
+
+export type ContactUsItem = {
+  name: string;
+  contact: string;
+}
+
+export type Faq = {
+  title: string;
+  content: string;
 };
 
 export type Post = {
@@ -60,6 +78,13 @@ export type Testimonial = {
   content: string;
 };
 
+export type Banner = {
+  title: string;
+  image: string;
+  content?: string;
+  button?: Button;
+};
+
 export type Call_to_action = {
   enable?: boolean;
   title: string;
@@ -72,4 +97,21 @@ export type Button = {
   enable: boolean;
   label: string;
   link: string;
+};
+
+export type contact_meta = {
+  frontmatter: {
+    heading: string;
+    subHeading: string;
+    subtitle?: string;
+  };
+  content?: string;
+  slug?: string;
+};
+
+export type Categories = {
+  id: number;
+  name: string;
+  imageSrc: string;
+  itemCount: number;
 };
