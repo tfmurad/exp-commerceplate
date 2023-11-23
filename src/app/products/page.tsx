@@ -42,7 +42,7 @@ const ShowProducts = async ({
     [key: string]: string;
   };
 
-  const { layout } = searchParams as { [key: string]: string };
+  const { layout, cursor } = searchParams as { [key: string]: string };
 
   const { sortKey, reverse } =
     sorting.find((item) => item.slug === sort) || defaultSort;
@@ -74,6 +74,7 @@ const ShowProducts = async ({
       sortKey,
       reverse,
       query: queryString,
+      cursor
     };
 
     productsData =
@@ -86,7 +87,7 @@ const ShowProducts = async ({
         : await getProducts(query);
   } else {
     // Fetch all products
-    productsData = await getProducts({ sortKey, reverse });
+    productsData = await getProducts({ sortKey, reverse, cursor });
   }
 
   // const products = await getProducts({ sortKey, reverse, query: searchValue });
@@ -160,6 +161,7 @@ const ShowProducts = async ({
                     : productsData?.products) || []
                 }
                 searchValue={searchValue}
+                searchParams={searchParams}
               />
             )}
           </div>

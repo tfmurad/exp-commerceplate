@@ -1,17 +1,14 @@
 "use client";
 
 import Logo from "@/components/Logo";
-import Search from "@/components/Search";
+import SearchBar from "@/components/SearchBar";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import config from "@/config/config.json";
 import menu from "@/config/menu.json";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { Suspense, useEffect, useState } from "react";
-import { useCollapse } from "react-collapsed";
 import { BsPerson } from "react-icons/bs/index.js";
-import { IoSearch } from "react-icons/io5/index.js";
-import { TbZoomCancel } from "react-icons/tb";
 
 //  child navigation link interface
 export interface IChildNavigationLink {
@@ -28,8 +25,7 @@ export interface INavigationLink {
 }
 
 const Header = ({ children }: { children: any }) => {
-  const { getCollapseProps, getToggleProps, isExpanded, setExpanded } =
-    useCollapse();
+
   const [navbarShadow, setNavbarShadow] = useState(false);
   // distructuring the main menu from menu object
   const { main }: { main: INavigationLink[] } = menu;
@@ -66,9 +62,8 @@ const Header = ({ children }: { children: any }) => {
 
   return (
     <header
-      className={`header z-30 ${settings.sticky_header && "sticky top-0"} ${
-        navbarShadow ? "shadow-sm" : "shadow-none"
-      }`}
+      className={`header z-30 ${settings.sticky_header && "sticky top-0"} ${navbarShadow ? "shadow-sm" : "shadow-none"
+        }`}
     >
       <nav className="navbar container">
         {/* logo */}
@@ -117,14 +112,13 @@ const Header = ({ children }: { children: any }) => {
                   className="nav-item nav-dropdown group relative"
                 >
                   <span
-                    className={`nav-link inline-flex items-center ${
-                      menu.children?.map(({ url }) => url).includes(pathname) ||
+                    className={`nav-link inline-flex items-center ${menu.children?.map(({ url }) => url).includes(pathname) ||
                       menu.children
                         ?.map(({ url }) => `${url}/`)
                         .includes(pathname)
-                        ? "active"
-                        : ""
-                    }`}
+                      ? "active"
+                      : ""
+                      }`}
                   >
                     {menu.name}
                     <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20">
@@ -132,19 +126,17 @@ const Header = ({ children }: { children: any }) => {
                     </svg>
                   </span>
                   <ul
-                    className={`nav-dropdown-list hidden lg:invisible lg:absolute lg:block lg:opacity-0 lg:group-hover:visible lg:group-hover:block lg:group-hover:opacity-100 ${
-                      showContent && "max-lg:block"
-                    }`}
+                    className={`nav-dropdown-list hidden lg:invisible lg:absolute lg:block lg:opacity-0 lg:group-hover:visible lg:group-hover:block lg:group-hover:opacity-100 ${showContent && "max-lg:block"
+                      }`}
                   >
                     {menu.children?.map((child, i) => (
                       <li className="nav-dropdown-item" key={`children-${i}`}>
                         <Link
                           href={child.url}
-                          className={`nav-dropdown-link block ${
-                            (pathname === `${child.url}/` ||
-                              pathname === child.url) &&
+                          className={`nav-dropdown-link block ${(pathname === `${child.url}/` ||
+                            pathname === child.url) &&
                             "nav-active"
-                          }`}
+                            }`}
                         >
                           {child.name}
                         </Link>
@@ -156,10 +148,9 @@ const Header = ({ children }: { children: any }) => {
                 <li className="nav-item">
                   <Link
                     href={menu.url}
-                    className={`nav-link block ${
-                      (pathname === `${menu.url}/` || pathname === menu.url) &&
+                    className={`nav-link block ${(pathname === `${menu.url}/` || pathname === menu.url) &&
                       "nav-active"
-                    }`}
+                      }`}
                   >
                     {menu.name}
                   </Link>
@@ -188,26 +179,9 @@ const Header = ({ children }: { children: any }) => {
             </Link>
           )} */}
 
-          {settings.search && (
-            <div className=" flex items-center">
-              <button
-                className="search-icon mr-4 md:mr-6"
-                {...getToggleProps()}
-              >
-                {isExpanded ? (
-                  <TbZoomCancel size={20} />
-                ) : (
-                  <IoSearch size={20} />
-                )}
-              </button>
-              <section
-                className="w-full rounded-md absolute top-[55px] lg:top-[72px] left-0"
-                {...getCollapseProps()}
-              >
-                <Search />
-              </section>
-            </div>
-          )}
+          {settings.search &&
+            <SearchBar />
+          }
 
           {settings.account && (
             <Link

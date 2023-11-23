@@ -130,7 +130,7 @@ const ProductLayouts = ({ categories, vendors, tags, maxPriceData }: any) => {
 
                 <form
                   onSubmit={onSubmit}
-                  className={`border border-border rounded-md flex max-lg:absolute right-0 -top-2`}
+                  className={`border border-border dark:border-darkmode-border rounded-md flex max-lg:absolute right-0 -top-2`}
                 >
                   <input
                     id="searchInput"
@@ -155,7 +155,7 @@ const ProductLayouts = ({ categories, vendors, tags, maxPriceData }: any) => {
                 <div className="flex gap-2">
                   <button
                     onClick={() => layoutChange("card")}
-                    className={`btn ${
+                    className={`btn border dark:border-darkmode-border ${
                       isListView ? "btn-outline-primary" : "btn-primary"
                     } p-2 hover:scale-105 duration-300`}
                   >
@@ -163,7 +163,7 @@ const ProductLayouts = ({ categories, vendors, tags, maxPriceData }: any) => {
                   </button>
                   <button
                     onClick={() => layoutChange("list")}
-                    className={`btn ${
+                    className={`btn border dark:border-darkmode-border ${
                       isListView ? "btn-primary" : "btn-outline-primary"
                     } p-2 hover:scale-105 duration-300`}
                   >

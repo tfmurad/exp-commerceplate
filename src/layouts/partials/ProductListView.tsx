@@ -75,7 +75,7 @@ const ProductListView = async ({ currentPage, products, searchValue }: any) => {
           width={312}
           height={269}
           alt={featuredImage?.altText || 'fallback image'}
-          className='w-[312px] h-[150px] md:h-[269px] object-cover border rounded-md'
+          className='w-[312px] h-[150px] md:h-[269px] object-cover border dark:border-darkmode-border rounded-md'
         />
       </div>
 

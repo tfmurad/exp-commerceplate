@@ -88,6 +88,7 @@ export type Banner = {
 export type Call_to_action = {
   enable?: boolean;
   title: string;
+  sub_title:string;
   description: string;
   image: string;
   button: Button;

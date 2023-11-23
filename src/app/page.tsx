@@ -8,25 +8,42 @@ import LatestProducts from "@/partials/LatestProducts";
 import SeoMeta from "@/partials/SeoMeta";
 import { Suspense } from "react";
 
-
-const ShowCategories = async () => {
-  const categories = await getCollections();
-  return <CategoriesSlider categories={categories} />
+const ShowHeroSlider= async ()=>{
+  const sliderImages = await getCollectionProducts({ collection: "hidden-homepage-carousel" });
+  const { products } = sliderImages;
+   return <HeroSlider products={products} />
 }
+
+
+// const ShowCategories = async () => {
+//   const categories = await getCollections();
+//   return <CategoriesSlider categories={categories} />
+// }
+
+const ShowCategories = async() => {
+  const categories = await getCollections();
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(<CategoriesSlider categories={categories} />);  
+    }, 2000); 
+  });
+
+}
+
 
 const ShowLatestProducts = async () => {
   const { pageInfo, products } = await getCollectionProducts({ collection: "latest-products", reverse: false });
   return <LatestProducts products={products} />
 }
 
-const Home = async () => {
+const Home = () => {
   const callToAction = getListPage("sections/call-to-action.md");
   // const homepage = getListPage("homepage/_index.md");
   // const { frontmatter } = homepage;
   // const { banner }: { banner: Banner[]; } = frontmatter;
 
-  const sliderImages = await getCollectionProducts({ collection: "hidden-homepage-carousel" });
-  const { products } = sliderImages;
+  // const sliderImages = await getCollectionProducts({ collection: "hidden-homepage-carousel" });
+  // const { products } = sliderImages;
 
   return (
     <>
@@ -34,7 +51,10 @@ const Home = async () => {
       <section>
         <div className="container">
           <div className="bg-gradient py-10 rounded-md">
-            <HeroSlider products={products} />
+            {/* <HeroSlider products={products} /> */}
+            <Suspense>
+            <ShowHeroSlider/>
+            </Suspense>
           </div>
         </div>
       </section>
@@ -58,6 +78,7 @@ const Home = async () => {
                   })}
               </div>
             }>
+            {/* @ts-ignore */}
             <ShowCategories />
           </Suspense>
         </div>

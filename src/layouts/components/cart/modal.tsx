@@ -46,14 +46,9 @@ export default function CartModal({ cart }: { cart: Cart | undefined }) {
         <Dialog onClose={closeCart} className="relative z-50">
           <Transition.Child
             as={Fragment}
-            enter="transition-all ease-in-out duration-300"
-            enterFrom="opacity-0 backdrop-blur-none"
-            enterTo="opacity-100 backdrop-blur-[.5px]"
-            leave="transition-all ease-in-out duration-200"
-            leaveFrom="opacity-100 backdrop-blur-[.5px]"
-            leaveTo="opacity-0 backdrop-blur-none"
+
           >
-            <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+            <div className="fixed inset-0" aria-hidden="true" />
           </Transition.Child>
           <Transition.Child
             as={Fragment}
@@ -64,7 +59,7 @@ export default function CartModal({ cart }: { cart: Cart | undefined }) {
             leaveFrom="translate-x-0"
             leaveTo="translate-x-full"
           >
-            <Dialog.Panel className="fixed bottom-0 right-0 top-0 flex h-full w-full flex-col border-l border-neutral-200 bg-body p-6 text-black backdrop-blur-xl dark:border-neutral-700 dark:bg-darkmode-body dark:text-white md:w-[390px]">
+            <Dialog.Panel className="fixed bottom-0 right-0 top-0 flex h-full md:h-fit w-full flex-col border-l border-b drop-shadow-lg rounded-bl-md border-neutral-200 bg-body p-6 text-black dark:border-neutral-700 dark:bg-darkmode-body dark:text-white md:w-[390px]">
               <div className="flex items-center justify-between">
                 <p className="text-lg font-semibold">Your Cart</p>
 
@@ -77,7 +72,7 @@ export default function CartModal({ cart }: { cart: Cart | undefined }) {
 
               {!cart || cart.lines.length === 0 ? (
                 <div className="flex flex-col justify-center items-center space-y-6 my-auto">
-                  <div>
+                  <div className="md:mt-16">
                     <FaShoppingCart size={76} />
                   </div>
                   <p>Your shopping bag is empty</p>

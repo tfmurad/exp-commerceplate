@@ -18,7 +18,7 @@
     "darkmode": {
       "theme_color": {
         "primary": "#fff",
-        "body": "#1c1c1c",
+        "body": "#252525",
         "border": "#3E3E3E",
         "theme_light": "#222222",
         "theme_dark": "#000",
@@ -35,7 +35,7 @@
     "font_family": {
       "primary": "Karla:wght@200;300;400;500;600;700;800",
       "primary_type": "sans-serif",
-      "secondary": "Gabarito:wght@400;500;600;700;800;900",
+      "secondary": "Karla:wght@200;300;400;500;600;700;800",
       "secondary_type": "sans-serif"
     },
     "font_size": {

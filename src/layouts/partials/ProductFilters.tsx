@@ -85,7 +85,7 @@ const ProductFilters = ({
     <div className="py-4 lg:py-10">
       <div>
         <h5 className="mb-2 lg:text-xl">Select Price Range</h5>
-        <hr/>
+        <hr className="dark:border-darkmode-border"/>
         <div className="py-4">
         <RangeSlider maxPriceData={maxPriceData} />
         </div>
@@ -109,7 +109,7 @@ const ProductFilters = ({
 
       <div>
         <h5 className="mb-2 lg:text-xl">Product Categories</h5>
-        <hr />
+        <hr className="dark:border-darkmode-border"/>
         <ul className="mt-4 space-y-4">
           {categories.map((category) => (
             <li
@@ -135,7 +135,7 @@ const ProductFilters = ({
       {vendors && (
         <div>
           <h5 className="mb-2 mt-8 lg:mt-10 lg:text-xl">Brands</h5>
-          <hr />
+          <hr className="dark:border-darkmode-border"/>
           <ul className="mt-4 space-y-4">
             {vendors.map((vendor) => (
               <li
@@ -195,7 +195,7 @@ const ProductFilters = ({
       {tags.length > 0 && (
         <div>
           <h5 className="mb-2 mt-8 lg:mt-10 lg:text-xl">Tags</h5>
-          <hr />
+          <hr className="dark:border-darkmode-border"/>
           {/* <button className="flex flex-wrap gap-3 mt-4">
             {tags.map((tag: string) => (
               <p

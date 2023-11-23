@@ -7,6 +7,8 @@ import {
   HiOutlineArrowNarrowLeft,
   HiOutlineArrowNarrowRight,
 } from "react-icons/hi";
+import InnerImageZoom from 'react-inner-image-zoom';
+import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css';
 import type { Swiper as TSwiper } from "swiper";
 import "swiper/css";
 import "swiper/css/free-mode";
@@ -14,10 +16,8 @@ import "swiper/css/navigation";
 import "swiper/css/thumbs";
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import InnerImageZoom from 'react-inner-image-zoom';
-import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css';
 
-interface ImageItem {
+export interface ImageItem {
   url: string;
   altText: string;
   width: number;
@@ -30,12 +30,14 @@ const ProductGallery = ({ images }: { images: ImageItem[] }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const searchParams = useSearchParams().get("color");
-  // console.log(activeIndex)
 
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
   const altTextArray = images.map((item: any) => item.altText);
+
+  const filteredImages = images
+    .filter((item: any) => item.altText === altTextArray[activeIndex]);
 
   useEffect(() => {
     if (searchParams) {
@@ -48,21 +50,36 @@ const ProductGallery = ({ images }: { images: ImageItem[] }) => {
     setActiveIndex(swiper.activeIndex);
   };
 
-  const handleThumbSlideClick = (index: number) => {
-    setActiveIndex(index);
+  // useEffect(() => {
+
+  //   if (searchParams) {
+  //     const index = altTextArray.findIndex(alt => alt === searchParams)
+  //     setActiveIndex(index);
+  //     console.log({ searchParams, altTextArray, index })
+
+  //   }
+
+  // }, [searchParams]);
+
+  const handleThumbSlideClick = (clickedUrl: string) => {
+    const foundIndex = filteredImages.findIndex(
+      (item: any) => item.url === clickedUrl
+    );
+    setActiveIndex(foundIndex);
+    console.log(clickedUrl, foundIndex);
   };
 
-  interface ImageObject {
-    [key: string]: ImageItem;
-  }
+  // interface ImageObject {
+  //   [key: string]: ImageItem;
+  // }
 
-  const imageObject: ImageObject = {};
+  // const imageObject: ImageObject = {};
+  // const imageArray: ImageItem[] = images.map((item: ImageItem) => {
+  //   imageObject[item.altText] = item;
+  //   return item;
+  // });
 
-  const imageArray: ImageItem[] = images.map((item: ImageItem) => {
-    imageObject[item.altText] = item;
-    return item;
-  });
-
+  // console.log(images)
   return (
     <>
       <div
@@ -80,22 +97,14 @@ const ProductGallery = ({ images }: { images: ImageItem[] }) => {
           }}
           onSlideChange={handleSlideChange}
         >
-          {images.map((item: any, index: number) => (
+          {filteredImages.map((item: any) => (
             <SwiperSlide key={item.url}>
-              {/* <Image
-                src={imageArray[activeIndex]?.url || item.url}
-                alt={item.altText}
+              <InnerImageZoom
+                src={item.url}
+                zoomSrc={item.url}
                 width={722}
                 height={623}
-                className="mb-6 border rounded-md "
-              /> */}
-              <InnerImageZoom 
-               src={imageArray[activeIndex]?.url || item.url}
-              zoomSrc={imageArray[activeIndex]?.url || item.url} 
-              // alt={item.altText}
-              width={722}
-              height={623}
-              className="mb-6 border rounded-md "
+                className="mb-6 border rounded-md max-h-[623px]"
               />
             </SwiperSlide>
           ))}
@@ -128,21 +137,16 @@ const ProductGallery = ({ images }: { images: ImageItem[] }) => {
         watchSlidesProgress={true}
         modules={[FreeMode, Navigation, Thumbs]}
       >
-        {images.map((item: any, index: number) => (
-          <SwiperSlide key={item.altText}>
+        {filteredImages.map((item: any, index: number) => (
+          <SwiperSlide key={item.url}>
             <div
-              onClick={() => handleThumbSlideClick(index)}
-              className={`rounded-md border cursor-pointer overflow-hidden ${index === activeIndex
+              onClick={() => handleThumbSlideClick(item.url)}
+              className={`rounded-md border cursor-pointer overflow-hidden ${filteredImages[activeIndex]?.url === item.url
                 ? "border border-primary dark:border-blue-500"
                 : ""
                 }`}
             >
-              <Image
-                src={item.url}
-                alt={item.altText}
-                width={168}
-                height={146}
-              />
+              <Image src={item.url} alt={item.altText} width={168} height={146} className="max-h-[146px]"/>
             </div>
           </SwiperSlide>
         ))}

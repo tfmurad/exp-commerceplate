@@ -79,7 +79,7 @@ const ShowProductSingle = async ({ params }: { params: { single: string } }) => 
 
               <div className="my-8 md:my-10 space-y-6 md:space-y-10">
                 <div className="-mt-2">
-                  {options && <VariantSelector options={options} variants={variants} />}
+                  {options && <VariantSelector options={options} variants={variants} images={images}/>}
                 </div>
               </div>
 
