@@ -4,25 +4,28 @@ import { SortFilterItem, sorting } from "@/lib/constants";
 import { createUrl } from "@/lib/utils";
 import ProductFilters from "@/partials/ProductFilters";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useCollapse } from "react-collapsed";
 import { BsGridFill } from "react-icons/bs";
 import { FaList } from "react-icons/fa6";
 import { IoSearch } from "react-icons/io5";
+import { TbFilter, TbFilterX } from "react-icons/tb";
 import DropdownMenu from "../filter/DropdownMenu";
 
 export type ListItem = SortFilterItem | PathFilterItem;
 export type PathFilterItem = { title: string; path: string };
 
-const ProductLayouts = ({ categories, vendors, tags, maxPriceData }: any) => {
+const ProductLayouts = ({ categories, vendors, tags, maxPriceData,vendorsWithCounts }: any) => {
   const { getCollapseProps, getToggleProps, isExpanded, setExpanded } =
     useCollapse();
 
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [isInputEditing, setInputEditing] = useState(false);
   const isListView = searchParams.get("layout") === "list";
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputEditing(true);
     const val = e.target as HTMLInputElement;
     const newParams = new URLSearchParams(searchParams.toString());
 
@@ -39,10 +42,10 @@ const ProductLayouts = ({ categories, vendors, tags, maxPriceData }: any) => {
     const inputField = document.getElementById(
       "searchInput",
     ) as HTMLInputElement;
-    if (inputField && searchParams.get("q")) {
+    if (isInputEditing || searchParams.get("q")) {
       inputField.focus();
     }
-  }, [searchParams]);
+  }, [searchParams,isInputEditing]);
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
@@ -54,6 +57,15 @@ const ProductLayouts = ({ categories, vendors, tags, maxPriceData }: any) => {
       ) {
         setExpanded(false);
       }
+
+      // set input editing state to false when clicking outside the input
+      if (
+        !target.closest("#searchInput") &&
+        isInputEditing &&
+        document.getElementById("searchInput")
+      ) {
+        setInputEditing(false);
+      }
     };
 
     document.addEventListener("click", handleOutsideClick);
@@ -61,7 +73,7 @@ const ProductLayouts = ({ categories, vendors, tags, maxPriceData }: any) => {
     return () => {
       document.removeEventListener("click", handleOutsideClick);
     };
-  }, [isExpanded, setExpanded]);
+  }, [isExpanded, setExpanded,isInputEditing]);
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -97,7 +109,6 @@ const ProductLayouts = ({ categories, vendors, tags, maxPriceData }: any) => {
           <div className="row gy-4">
             <div className="col-12 lg:col-3">
               <div className=" lg:block relative">
-                
                 {/* <div className="block lg:hidden">
                   <PopoverFilter categories={categories}
                     vendors={vendors}
@@ -106,17 +117,21 @@ const ProductLayouts = ({ categories, vendors, tags, maxPriceData }: any) => {
                 </div> */}
 
                 <div className="block lg:hidden w-full">
-                  <div className="filter-button-container">
+                  <div className="filter-button-container mb-4">
                     <button {...getToggleProps()}>
                       {isExpanded ? (
-                        <span>&times; Filter</span>
+                        <span className="font-medium text-base flex gap-x-1 items-center justify-center">
+                          <TbFilterX /> Filter
+                        </span>
                       ) : (
-                        <span>+ Filter</span>
+                        <span className="font-medium text-base flex gap-x-1 items-center justify-center">
+                          <TbFilter /> Filter
+                        </span>
                       )}
                     </button>
                   </div>
                   <section
-                    className="collapse-container-class mt-4 z-20 bg-body dark:bg-darkmode-body w-full px-4 rounded-md"
+                    className="collapse-container-class z-20 bg-body dark:bg-darkmode-body w-full px-4 rounded-md"
                     {...getCollapseProps()}
                   >
                     <ProductFilters
@@ -124,29 +139,33 @@ const ProductLayouts = ({ categories, vendors, tags, maxPriceData }: any) => {
                       vendors={vendors}
                       tags={tags}
                       maxPriceData={maxPriceData}
+                      vendorsWithCounts={vendorsWithCounts}
                     />
                   </section>
                 </div>
 
-                <form
-                  onSubmit={onSubmit}
-                  className={`border border-border dark:border-darkmode-border rounded-md flex max-lg:absolute right-0 -top-2`}
-                >
-                  <input
-                    id="searchInput"
-                    className="bg-transparent border-none focus:ring-transparent pr-0 pl-2 w-full"
-                    key={searchParams?.get("q")}
-                    type="text"
-                    name="search"
-                    placeholder="Search for products..."
-                    autoComplete="off"
-                    defaultValue={searchParams?.get("q") || ""}
-                    onChange={handleChange}
-                  />
-                  <button className="pr-2 search-icon">
-                    <IoSearch size={20} />
-                  </button>
-                </form>
+                <div>
+                  <h5 className="mb-2 lg:text-xl max-lg:hidden">Search</h5>
+                  <form
+                    onSubmit={onSubmit}
+                    className={`border border-border dark:border-darkmode-border rounded-md flex max-lg:absolute right-0 -top-2`}
+                  >
+                    <input
+                      id="searchInput"
+                      className="bg-transparent border-none focus:ring-transparent pr-0 pl-2 w-full"
+                      key={searchParams?.get("q")}
+                      type="text"
+                      name="search"
+                      placeholder="Search for products"
+                      autoComplete="off"
+                      defaultValue={searchParams?.get("q") || ""}
+                      onChange={handleChange}
+                    />
+                    <button className="pr-2 search-icon">
+                      <IoSearch size={20} />
+                    </button>
+                  </form>
+                </div>
               </div>
             </div>
 
@@ -155,17 +174,15 @@ const ProductLayouts = ({ categories, vendors, tags, maxPriceData }: any) => {
                 <div className="flex gap-2">
                   <button
                     onClick={() => layoutChange("card")}
-                    className={`btn border dark:border-darkmode-border ${
-                      isListView ? "btn-outline-primary" : "btn-primary"
-                    } p-2 hover:scale-105 duration-300`}
+                    className={`btn border dark:border-darkmode-border ${isListView ? "btn-outline-primary" : "btn-primary"
+                      } p-2 hover:scale-105 duration-300`}
                   >
                     <BsGridFill />
                   </button>
                   <button
                     onClick={() => layoutChange("list")}
-                    className={`btn border dark:border-darkmode-border ${
-                      isListView ? "btn-primary" : "btn-outline-primary"
-                    } p-2 hover:scale-105 duration-300`}
+                    className={`btn border dark:border-darkmode-border ${isListView ? "btn-primary" : "btn-outline-primary"
+                      } p-2 hover:scale-105 duration-300`}
                   >
                     <FaList />
                   </button>

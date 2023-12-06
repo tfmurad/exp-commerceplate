@@ -8,6 +8,12 @@ export type RegularPage = {
     draft?: boolean;
     about_us?: AboutUsItem[]; 
     contact_meta?: ContactUsItem[];
+    faq_section_title?: string;
+    faq_section_subtitle?:string;
+    faqs?:{title:string, content:string}[];
+    testimonials_section_enable:boolean;
+    testimonials_section_title?: string;
+    testimonials?: {name: string, designation:string, avatar:string, content: string}[]; 
   };
   content: string;
   slug?: string;
@@ -16,7 +22,7 @@ export type RegularPage = {
 export type AboutUsItem = {
   image: string;
   content: string;
-  heading: string;
+  title: string;
 }
 
 export type ContactUsItem = {

@@ -7,8 +7,8 @@ import {
   HiOutlineArrowNarrowLeft,
   HiOutlineArrowNarrowRight,
 } from "react-icons/hi";
-import InnerImageZoom from 'react-inner-image-zoom';
-import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css';
+import InnerImageZoom from "react-inner-image-zoom";
+import "react-inner-image-zoom/lib/InnerImageZoom/styles.css";
 import type { Swiper as TSwiper } from "swiper";
 import "swiper/css";
 import "swiper/css/free-mode";
@@ -16,6 +16,7 @@ import "swiper/css/navigation";
 import "swiper/css/thumbs";
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import LoadingProductThumb from "../loading/LoadingProductThumb";
 
 export interface ImageItem {
   url: string;
@@ -28,6 +29,7 @@ const ProductGallery = ({ images }: { images: ImageItem[] }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState<TSwiper | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [loadingThumb, setLoadingThumb] = useState(true);
 
   const searchParams = useSearchParams().get("color");
 
@@ -36,14 +38,16 @@ const ProductGallery = ({ images }: { images: ImageItem[] }) => {
 
   const altTextArray = images.map((item: any) => item.altText);
 
-  const filteredImages = images
-    .filter((item: any) => item.altText === altTextArray[activeIndex]);
+  const filteredImages = images.filter(
+    (item: any) => item.altText === altTextArray[activeIndex],
+  );
 
   useEffect(() => {
     if (searchParams) {
       const foundIndex = altTextArray.indexOf(searchParams);
       setActiveIndex(foundIndex);
     }
+    setLoadingThumb(false);
   }, [searchParams, altTextArray]);
 
   const handleSlideChange = (swiper: TSwiper) => {
@@ -56,30 +60,21 @@ const ProductGallery = ({ images }: { images: ImageItem[] }) => {
   //     const index = altTextArray.findIndex(alt => alt === searchParams)
   //     setActiveIndex(index);
   //     console.log({ searchParams, altTextArray, index })
-
   //   }
 
   // }, [searchParams]);
 
   const handleThumbSlideClick = (clickedUrl: string) => {
     const foundIndex = filteredImages.findIndex(
-      (item: any) => item.url === clickedUrl
+      (item: any) => item.url === clickedUrl,
     );
     setActiveIndex(foundIndex);
-    console.log(clickedUrl, foundIndex);
   };
 
-  // interface ImageObject {
-  //   [key: string]: ImageItem;
-  // }
+  if (loadingThumb) {
+    return <LoadingProductThumb />;
+  }
 
-  // const imageObject: ImageObject = {};
-  // const imageArray: ImageItem[] = images.map((item: ImageItem) => {
-  //   imageObject[item.altText] = item;
-  //   return item;
-  // });
-
-  // console.log(images)
   return (
     <>
       <div
@@ -109,10 +104,11 @@ const ProductGallery = ({ images }: { images: ImageItem[] }) => {
             </SwiperSlide>
           ))}
           <div
-            className={`hidden lg:block justify-between w-full absolute top-1/2 -translate-y-1/2 z-10 px-6 text-dark ${isHovered
-              ? "opacity-100 transition-opacity duration-300 ease-in-out"
-              : "opacity-0 transition-opacity duration-300 ease-in-out"
-              }`}
+            className={`hidden lg:block w-full absolute top-1/2 -translate-y-1/2 z-10 px-6 text-dark ${
+              isHovered
+                ? "opacity-100 transition-opacity duration-300 ease-in-out"
+                : "opacity-0 transition-opacity duration-300 ease-in-out"
+            }`}
           >
             <div
               ref={prevRef}
@@ -141,12 +137,19 @@ const ProductGallery = ({ images }: { images: ImageItem[] }) => {
           <SwiperSlide key={item.url}>
             <div
               onClick={() => handleThumbSlideClick(item.url)}
-              className={`rounded-md border cursor-pointer overflow-hidden ${filteredImages[activeIndex]?.url === item.url
-                ? "border border-primary dark:border-blue-500"
-                : ""
-                }`}
+              className={`rounded-md border cursor-pointer overflow-hidden ${
+                filteredImages[activeIndex]?.url === item.url
+                  ? "border border-primary dark:border-blue-500"
+                  : ""
+              }`}
             >
-              <Image src={item.url} alt={item.altText} width={168} height={146} className="max-h-[146px]"/>
+              <Image
+                src={item.url}
+                alt={item.altText}
+                width={168}
+                height={146}
+                className="max-h-[146px]"
+              />
             </div>
           </SwiperSlide>
         ))}

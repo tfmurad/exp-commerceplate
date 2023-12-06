@@ -51,3 +51,15 @@ const htmlEntityDecoder = (htmlWithEntities: string): string => {
   );
   return htmlWithoutEntities;
 };
+
+// removeSlug
+export const removeSlug = (slug: string) => {
+  // Split the slug into words using '-' as the separator
+  const words = slug.split('-');
+
+  // Capitalize the first character of each word and join them with a space
+  const formattedSlug = words.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+
+  return formattedSlug;
+}
+

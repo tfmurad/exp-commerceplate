@@ -24,7 +24,7 @@ function SubmitButton({
 }) {
   const { pending } = useFormStatus();
   const buttonClasses = stylesClass;
-  const disabledClasses = 'cursor-not-allowed opacity-60 hover:opacity-60 flex';
+  const disabledClasses = 'cursor-not-allowed flex';
 
   const DynamicTag = handle === null ? 'button' : Link;
 

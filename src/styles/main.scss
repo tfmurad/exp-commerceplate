@@ -15,3 +15,8 @@
 @layer utilities {
   @import "utilities";
 }
+
+
+.iiz__hint{
+  @apply rounded-md
+}

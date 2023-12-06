@@ -18,7 +18,7 @@ const CallToAction = ({ data }: { data: PageData }) => {
             <div className="rounded-xl bg-theme-light px-6 py-8 md:py-16 dark:bg-darkmode-theme-light">
               <div className="row items-center">
                 <div className="mb-10 md:mb-0 lg:col-6 xl:col-6 mx-auto text-center order-2 lg:order-0">
-                <p
+                  <p
                     dangerouslySetInnerHTML={markdownify(
                       data.frontmatter.sub_title,
                     )}
@@ -36,26 +36,12 @@ const CallToAction = ({ data }: { data: PageData }) => {
                     )}
                     className="mb-6 md:text-lg"
                   />
-                  {/* {data.frontmatter.button.enable && (
-                    <form className="flex justify-center">
-                      <input
-                        placeholder="Email Here"
-                        type="email"
-                        className="form-input bg-white rounded-r-none py-2"
-                      />
-                      <input
-                        className="btn btn-sm md:btn-md btn-primary rounded-tl-none rounded-bl-none cursor-pointer border-none"
-                        type="submit"
-                        value="Subscribe"
-                      />
-                    </form>
-                  )} */}
 
                   {
-                    data.frontmatter.button.enable && 
-                    <Link className="btn btn-sm md:btn-lg btn-primary font-medium" href={`/products`}>
-                    Shop Now
-                  </Link>
+                    data.frontmatter.button.enable &&
+                    <Link className="btn btn-sm md:btn-lg btn-primary font-medium" href={data.frontmatter.button.link}>
+                      {data.frontmatter.button.label}
+                    </Link>
                   }
                 </div>
 

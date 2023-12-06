@@ -65,18 +65,20 @@ function PathFilterItem({ item }: { item: PathFilterItem }) {
 function SortFilterItem({ item }: { item: SortFilterItem }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  
+
   const q = searchParams.get('q');
-  
-  const newParams = new URLSearchParams(searchParams.toString());  
+
+  const newParams = new URLSearchParams(searchParams.toString());
 
   if (item.slug) {
     newParams.set('sort', item.slug);
+  } else {
+    newParams.delete('sort')
   }
 
   const href = createUrl(pathname, newParams);
-  
-  const active = searchParams.get('sort') === item.slug;  
+
+  const active = searchParams.get('sort') === item.slug;
 
   const DynamicTag = active ? 'p' : Link;
 

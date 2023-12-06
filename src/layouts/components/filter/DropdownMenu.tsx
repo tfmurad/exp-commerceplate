@@ -8,7 +8,7 @@ import { FilterItem } from "./item";
 const DropdownMenu = ({ list }: { list: ListItem[] }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [active, setActive] = useState('');
+  const [active, setActive] = useState("");
 
   const [openSelect, setOpenSelect] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -20,15 +20,15 @@ const DropdownMenu = ({ list }: { list: ListItem[] }) => {
       }
     };
 
-    window.addEventListener('click', handleClickOutside);
-    return () => window.removeEventListener('click', handleClickOutside);
+    window.addEventListener("click", handleClickOutside);
+    return () => window.removeEventListener("click", handleClickOutside);
   }, []);
 
   useEffect(() => {
     list.forEach((listItem: ListItem) => {
       if (
-        ('path' in listItem && pathname === listItem.path) ||
-        ('slug' in listItem && searchParams.get('sort') === listItem.slug)
+        ("path" in listItem && pathname === listItem.path) ||
+        ("slug" in listItem && searchParams.get("sort") === listItem.slug)
       ) {
         setActive(listItem.title);
       }
@@ -39,7 +39,7 @@ const DropdownMenu = ({ list }: { list: ListItem[] }) => {
     <div className="relative inline-block text-left text-light" ref={menuRef}>
       <button
         type="button"
-        className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+        className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-light/10"
         onClick={() => {
           setOpenSelect(!openSelect);
         }}
@@ -48,8 +48,9 @@ const DropdownMenu = ({ list }: { list: ListItem[] }) => {
       >
         <div>{active}</div>
         <svg
-          className={`-mr-1 h-5 w-5 text-gray-400 transform ${openSelect ? "rotate-180" : ""
-            } transition-transform`}
+          className={`-mr-1 h-5 w-5 text-gray-400 transform ${
+            openSelect ? "rotate-180" : ""
+          } transition-transform`}
           fill="currentColor"
           viewBox="0 0 20 20"
           aria-hidden="true"
@@ -69,7 +70,11 @@ const DropdownMenu = ({ list }: { list: ListItem[] }) => {
             setOpenSelect(false);
           }}
         >
-          <div role="menu" aria-orientation="vertical" aria-labelledby="menu-button">
+          <div
+            role="menu"
+            aria-orientation="vertical"
+            aria-labelledby="menu-button"
+          >
             {list.map((item: ListItem, i) => (
               <FilterItem key={i} item={item} />
             ))}

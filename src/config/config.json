@@ -1,7 +1,7 @@
 {
   "site": {
     "title": "Commerceplate",
-    "base_url": "https://nextplate.netlify.app",
+    "base_url": "https://tf-commerceplate.netlify.app/",
     "base_path": "/",
     "trailing_slash": false,
     "favicon": "/images/favicon.png",
@@ -34,15 +34,9 @@
   },
 
   "navigation_button": {
-    "enable": true,
+    "enable": false,
     "label": "Get Started",
-    "link": "https://github.com/zeon-studio/nextplate"
-  },
-
-  "disqus": {
-    "enable": true,
-    "shortname": "themefisher-template",
-    "settings": {}
+    "link": "https://tf-commerceplate.netlify.app/"
   },
 
   "metadata": {
