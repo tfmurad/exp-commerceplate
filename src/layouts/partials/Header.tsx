@@ -26,7 +26,7 @@ export interface INavigationLink {
 
 const Header = ({ children }: { children: any }) => {
   const [navbarShadow, setNavbarShadow] = useState(false);
-  // distructuring the main menu from menu object
+  // destructuring the main menu from menu object
   const { main }: { main: INavigationLink[] } = menu;
   const { navigation_button, settings } = config;
   // get current path
@@ -61,8 +61,9 @@ const Header = ({ children }: { children: any }) => {
 
   return (
     <header
-      className={`header z-30 ${settings.sticky_header && "sticky top-0"} ${navbarShadow ? "shadow-sm" : "shadow-none"
-        }`}
+      className={`header z-30 ${settings.sticky_header && "sticky top-0"} ${
+        navbarShadow ? "shadow-sm" : "shadow-none"
+      }`}
     >
       <nav className="navbar container">
         <div className="order-0 flex items-center">
@@ -110,13 +111,14 @@ const Header = ({ children }: { children: any }) => {
                   className="nav-item nav-dropdown group relative"
                 >
                   <span
-                    className={`nav-link inline-flex items-center ${menu.children?.map(({ url }) => url).includes(pathname) ||
-                        menu.children
-                          ?.map(({ url }) => `${url}/`)
-                          .includes(pathname)
+                    className={`nav-link inline-flex items-center ${
+                      menu.children?.map(({ url }) => url).includes(pathname) ||
+                      menu.children
+                        ?.map(({ url }) => `${url}/`)
+                        .includes(pathname)
                         ? "active"
                         : ""
-                      }`}
+                    }`}
                   >
                     {menu.name}
                     <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20">
@@ -124,17 +126,19 @@ const Header = ({ children }: { children: any }) => {
                     </svg>
                   </span>
                   <ul
-                    className={`nav-dropdown-list hidden lg:invisible lg:absolute lg:block lg:opacity-0 lg:group-hover:visible lg:group-hover:block lg:group-hover:opacity-100 ${showContent && "max-lg:block"
-                      }`}
+                    className={`nav-dropdown-list hidden lg:invisible lg:absolute lg:block lg:opacity-0 lg:group-hover:visible lg:group-hover:block lg:group-hover:opacity-100 ${
+                      showContent && "max-lg:block"
+                    }`}
                   >
                     {menu.children?.map((child, i) => (
                       <li className="nav-dropdown-item" key={`children-${i}`}>
                         <Link
                           href={child.url}
-                          className={`nav-dropdown-link block ${(pathname === `${child.url}/` ||
+                          className={`nav-dropdown-link block ${
+                            (pathname === `${child.url}/` ||
                               pathname === child.url) &&
                             "nav-active"
-                            }`}
+                          }`}
                         >
                           {child.name}
                         </Link>
@@ -146,9 +150,10 @@ const Header = ({ children }: { children: any }) => {
                 <li className="nav-item">
                   <Link
                     href={menu.url}
-                    className={`nav-link block ${(pathname === `${menu.url}/` || pathname === menu.url) &&
+                    className={`nav-link block ${
+                      (pathname === `${menu.url}/` || pathname === menu.url) &&
                       "nav-active"
-                      }`}
+                    }`}
                   >
                     {menu.name}
                   </Link>
@@ -169,10 +174,9 @@ const Header = ({ children }: { children: any }) => {
         </ul>
 
         <div className="order-1 ml-auto max-lg:mr-6 flex items-center md:order-2 lg:ml-0">
-          <ThemeSwitcher className="mr-4 md:mr-6" />
-
           {settings.search && <SearchBar />}
 
+          <ThemeSwitcher className="mr-4 md:mr-6" />
           <Suspense fallback={children[0]}>{children[1]}</Suspense>
 
           {settings.account && (

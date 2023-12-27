@@ -1,7 +1,14 @@
 import Social from "@/components/Social";
+import DynamicIcon from "@/helpers/DynamicIcon";
 import ImageFallback from "@/helpers/ImageFallback";
 import { plainify } from "@/lib/utils/textConverter";
 import Link from "next/link";
+
+export interface ISocial {
+  name: string;
+  icon: string;
+  link: string;
+}
 
 const AuthorCard = ({ data }: { data: any }) => {
   const { title, image, social } = data.frontmatter;
@@ -11,7 +18,7 @@ const AuthorCard = ({ data }: { data: any }) => {
         <ImageFallback
           className="mx-auto mb-6 rounded"
           src={image}
-          alt={title} 
+          alt={title}
           width={120}
           height={120}
         />
@@ -20,7 +27,23 @@ const AuthorCard = ({ data }: { data: any }) => {
         <Link href={`/authors/${data.slug}`}>{title}</Link>
       </h4>
       <p className="mb-4">{plainify(data.content?.slice(0, 100))}</p>
-      <Social source={social} className="social-icons" />
+
+      {/* social share */}
+      <ul className="social-icons">
+        {social.map((social: ISocial) => (
+          <li key={social.name}>
+            <a
+              aria-label={social.name}
+              href={social.link}
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+            >
+              <span className="sr-only">{social.name}</span>
+              <DynamicIcon className="inline-block" icon={social.icon} />
+            </a>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

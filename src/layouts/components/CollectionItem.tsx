@@ -6,7 +6,7 @@ import { createUrl } from "@/lib/utils";
 const CollectionItem = ({
   title,
   path,
-  productCount
+  productCount,
 }: {
   title: string;
   path: string;
@@ -25,7 +25,7 @@ const CollectionItem = ({
           isActive ? "text-dark dark:text-darkmode-light font-semibold" : ""
         }`}
       >
-        {title} <span>{productCount > 0 ? `(${productCount})` : ''}</span>
+        {title} <span>{productCount > 0 ? `(${productCount})` : ""}</span>
       </Link>
     </li>
   );

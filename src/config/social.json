@@ -2,22 +2,22 @@
   "main": [
     {
       "name": "facebook",
-      "icon": "FaFacebook",
+      "icon": "FaFacebookF",
       "link": "https://www.facebook.com/"
     },
     {
       "name": "twitter",
-      "icon": "FaTwitter",
+      "icon": "FaXTwitter",
       "link": "https://twitter.com/"
     },
     {
-      "name": "github",
-      "icon": "FaGithub",
-      "link": "https://www.github.com/"
+      "name": "instagram",
+      "icon": "FaInstagram",
+      "link": "https://www.instagram.com/"
     },
     {
       "name": "linkedin",
-      "icon": "FaLinkedin",
+      "icon": "FaLinkedinIn",
       "link": "https://www.linkedin.com/"
     }
   ]

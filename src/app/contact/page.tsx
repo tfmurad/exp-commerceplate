@@ -23,14 +23,19 @@ const Contact = async () => {
       <section className="pt-12 xl:pt-24">
         <div className="container">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {
-              contact_meta && contact_meta?.map((contact: ContactUsItem) => (
-                <div key={contact.name} className="p-10 bg-theme-light dark:bg-darkmode-theme-light rounded-md text-center">
-                  <p dangerouslySetInnerHTML={markdownify(contact.name)} className="mb-6 h3 font-medium text-dark dark:text-darkmode-dark"/>
+            {contact_meta &&
+              contact_meta?.map((contact: ContactUsItem) => (
+                <div
+                  key={contact.name}
+                  className="p-10 bg-theme-light dark:bg-darkmode-theme-light rounded-md text-center"
+                >
+                  <p
+                    dangerouslySetInnerHTML={markdownify(contact.name)}
+                    className="mb-6 h3 font-medium text-dark dark:text-darkmode-dark"
+                  />
                   <p dangerouslySetInnerHTML={markdownify(contact.contact)} />
                 </div>
-              ))
-            }
+              ))}
           </div>
         </div>
       </section>
@@ -38,8 +43,15 @@ const Contact = async () => {
       <section className="section">
         <div className="container">
           <div className="mx-auto sm:col-9 md:col-10">
-            <h2 className="mb-14 text-center">We would love to hear from you!</h2>
-            <form className="border border-border rounded-md p-10" action={contact_form_action} method="POST">
+            <h2 className="mb-14 text-center">
+              We would love to hear from you!
+            </h2>
+
+            <form
+              className="border border-border rounded-md p-10"
+              action={contact_form_action}
+              method="POST"
+            >
               <div className="mb-6 md:grid grid-cols-2 gap-x-8 max-md:space-y-6">
                 <div>
                   <label htmlFor="name" className="form-label">
@@ -98,6 +110,7 @@ const Contact = async () => {
                   />
                 </div>
               </div>
+
               <div className="mb-6">
                 <label htmlFor="message" className="form-label">
                   Message <span className="text-red-500">*</span>

@@ -6,14 +6,19 @@ export type RegularPage = {
     meta_title?: string;
     layout?: string;
     draft?: boolean;
-    about_us?: AboutUsItem[]; 
+    about_us?: AboutUsItem[];
     contact_meta?: ContactUsItem[];
     faq_section_title?: string;
-    faq_section_subtitle?:string;
-    faqs?:{title:string, content:string}[];
-    testimonials_section_enable:boolean;
+    faq_section_subtitle?: string;
+    faqs?: { title: string; content: string }[];
+    testimonials_section_enable: boolean;
     testimonials_section_title?: string;
-    testimonials?: {name: string, designation:string, avatar:string, content: string}[]; 
+    testimonials?: {
+      name: string;
+      designation: string;
+      avatar: string;
+      content: string;
+    }[];
   };
   content: string;
   slug?: string;
@@ -23,12 +28,12 @@ export type AboutUsItem = {
   image: string;
   content: string;
   title: string;
-}
+};
 
 export type ContactUsItem = {
   name: string;
   contact: string;
-}
+};
 
 export type Faq = {
   title: string;
@@ -94,7 +99,7 @@ export type Banner = {
 export type Call_to_action = {
   enable?: boolean;
   title: string;
-  sub_title:string;
+  sub_title: string;
   description: string;
   image: string;
   button: Button;

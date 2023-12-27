@@ -24,9 +24,18 @@ export const humanize = (content: string) => {
     });
 };
 
+// titleify
+export const titleify = (content: string) => {
+  const humanized = humanize(content);
+  return humanized
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+};
+
 // plainify
 export const plainify = (content: string) => {
-  const parseMarkdown = marked.parse(content);
+  const parseMarkdown: any = marked.parse(content);
   const filterBrackets = parseMarkdown.replace(/<\/?[^>]+(>|$)/gm, "");
   const filterSpaces = filterBrackets.replace(/[\r\n]\s*[\r\n]/gm, "");
   const stripHTML = htmlEntityDecoder(filterSpaces);
@@ -51,15 +60,3 @@ const htmlEntityDecoder = (htmlWithEntities: string): string => {
   );
   return htmlWithoutEntities;
 };
-
-// removeSlug
-export const removeSlug = (slug: string) => {
-  // Split the slug into words using '-' as the separator
-  const words = slug.split('-');
-
-  // Capitalize the first character of each word and join them with a space
-  const formattedSlug = words.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-
-  return formattedSlug;
-}
-

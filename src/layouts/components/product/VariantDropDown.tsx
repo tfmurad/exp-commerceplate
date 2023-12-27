@@ -1,19 +1,16 @@
-"use client"
+"use client";
 
-import { Fragment, useState } from 'react';
-import { Listbox, Transition } from '@headlessui/react';
-import { BsCheckLg } from 'react-icons/bs';
-import { createUrl } from '@/lib/utils';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { ProductOption } from '@/lib/shopify/types';
+import { Fragment, useState } from "react";
+import { Listbox, Transition } from "@headlessui/react";
+import { createUrl } from "@/lib/utils";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const VariantDropDown = ({ sizeOption }: any) => {
-  const [selected, setSelected] = useState('Select One');
+  const [selected, setSelected] = useState("Select One");
 
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  
 
   const handleSizeChanged = (selected: string) => {
     setSelected(selected);
@@ -56,8 +53,8 @@ const VariantDropDown = ({ sizeOption }: any) => {
                 <Listbox.Option
                   key={size}
                   className={({ active }) =>
-                    `relative select-none py-2 pl-10 pr-4 cursor-pointer ${
-                      active ? 'bg-light text-white' : 'text-light'
+                    `relative select-none py-2 pl-4 cursor-pointer ${
+                      active ? "bg-light text-white" : "text-light"
                     }`
                   }
                   value={size}
@@ -66,16 +63,16 @@ const VariantDropDown = ({ sizeOption }: any) => {
                     <>
                       <span
                         className={`block truncate ${
-                          selected ? 'font-medium' : 'font-normal'
+                          selected ? "font-medium" : "font-normal"
                         }`}
                       >
                         {size}
                       </span>
-                      {selected ? (
+                      {/* {selected ? (
                         <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
                           <BsCheckLg className="h-5 w-5" aria-hidden="true" />
                         </span>
-                      ) : null}
+                      ) : null} */}
                     </>
                   )}
                 </Listbox.Option>

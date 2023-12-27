@@ -197,6 +197,7 @@ export type ShopifyProduct = {
   tags: string[];
   updatedAt: string;
   vendor: string;
+  collections: any;
 };
 
 export type ShopifyCartOperation = {
@@ -326,18 +327,6 @@ export type ShopifyProductRecommendationsOperation = {
     productId: string;
   };
 };
-
-// export type ShopifyProductsOperation = {
-//   data: {
-//     products: Connection<ShopifyProduct>;
-//   };
-//   variables: {
-//     query?: string;
-//     reverse?: boolean;
-//     sortKey?: string;
-//     cursor?: string;
-//   };
-// };
 
 export type ShopifyProductsOperation = {
   data: {

@@ -37,12 +37,14 @@ const CallToAction = ({ data }: { data: PageData }) => {
                     className="mb-6 md:text-lg"
                   />
 
-                  {
-                    data.frontmatter.button.enable &&
-                    <Link className="btn btn-sm md:btn-lg btn-primary font-medium" href={data.frontmatter.button.link}>
+                  {data.frontmatter.button.enable && (
+                    <Link
+                      className="btn btn-sm md:btn-lg btn-primary font-medium"
+                      href={data.frontmatter.button.link}
+                    >
                       {data.frontmatter.button.label}
                     </Link>
-                  }
+                  )}
                 </div>
 
                 <div className="mx-auto lg:col-5 mb-6 lg:mb-0">

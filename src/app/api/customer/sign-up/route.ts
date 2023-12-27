@@ -5,13 +5,24 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
   try {
     const input = await req.json();
-    const {customer, customerCreateErrors} = await createCustomer(input);
-    const {token} = await getCustomerAccessToken(input);
+    const { customer, customerCreateErrors } = await createCustomer(input);
+    const { token } = await getCustomerAccessToken(input);
+
+    if (customerCreateErrors.length > 0) {
+      return NextResponse.json(
+        { errors: customerCreateErrors },
+        { status: 400 },
+      );
+    }
+
     cookies().set("token", token);
-    cookies().set("customerCreateErrors", JSON.stringify(customerCreateErrors));
+
     return NextResponse.json({ ...customer, token });
   } catch (error: any) {
     const { message, status } = error.error;
-    return NextResponse.json(message, { status });
+    return NextResponse.json(
+      { errors: [{ code: "INTERNAL_ERROR", message }] },
+      { status },
+    );
   }
 }

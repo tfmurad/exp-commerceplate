@@ -100,7 +100,7 @@ input#nav-toggle:checked ~ #nav-menu {
   }
 }
 
-// footer items 
+// footer items
 .footer-link {
   @apply text-sm md:text-base font-medium transition text-light hover:text-dark dark:text-darkmode-text dark:hover:text-darkmode-primary;
 }

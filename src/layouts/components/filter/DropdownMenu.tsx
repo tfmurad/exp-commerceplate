@@ -3,7 +3,7 @@
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { ListItem } from "../product/ProductLayouts";
-import { FilterItem } from "./item";
+import { FilterDropdownItem } from "./FilterDropdownItem";
 
 const DropdownMenu = ({ list }: { list: ListItem[] }) => {
   const pathname = usePathname();
@@ -76,7 +76,7 @@ const DropdownMenu = ({ list }: { list: ListItem[] }) => {
             aria-labelledby="menu-button"
           >
             {list.map((item: ListItem, i) => (
-              <FilterItem key={i} item={item} />
+              <FilterDropdownItem key={i} item={item} />
             ))}
           </div>
         </div>

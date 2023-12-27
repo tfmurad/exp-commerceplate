@@ -1,5 +1,5 @@
-import LoadingProducts from "@/components/loading/LoadingProducts";
 import ProductLayouts from "@/components/product/ProductLayouts";
+import LoadingProducts from "@/components/skeleton/SkeletonProducts";
 import { defaultSort, sorting } from "@/lib/constants";
 import { getListPage } from "@/lib/contentParser";
 import {
@@ -51,7 +51,7 @@ const ShowProducts = async ({
 
   let productsData: any;
   let vendorsWithCounts: { vendor: string; productCount: number }[] = [];
-  // let categoriesWithCounts: { category: string; productCount: number }[] = [];
+  let categoriesWithCounts: { category: string; productCount: number }[] = [];
 
   if (searchValue || brand || minPrice || maxPrice || category || tag) {
     let queryString = "";
@@ -98,14 +98,16 @@ const ShowProducts = async ({
       ),
     ];
 
-    // const uniqueCategories: string[] = [
-    //   ...new Set(
-    //     ((productsData?.products as Product[]) || []).map(
-    //       (product: Product) => String(product?.category || ""),
-    //     ),
-    //   ),
-    // ];
-  
+    const uniqueCategories: string[] = [
+      ...new Set(
+        ((productsData?.products as Product[]) || []).flatMap(
+          (product: Product) =>
+            product.collections.nodes.map(
+              (collectionNode: any) => collectionNode.title || "",
+            ),
+        ),
+      ),
+    ];
 
     vendorsWithCounts = uniqueVendors.map((vendor: string) => {
       const productCount = (productsData?.products || []).filter(
@@ -114,18 +116,20 @@ const ShowProducts = async ({
       return { vendor, productCount };
     });
 
-    // categoriesWithCounts = uniqueCategories.map((category: string) => {
-    //   const productCount = (productsData?.products || []).filter(
-    //     (product: Product) => product?.category === category,
-    //   ).length;
-    //   return { category, productCount };
-    // });
-
+    categoriesWithCounts = uniqueCategories.map((category: string) => {
+      const productCount = ((productsData?.products as Product[]) || []).filter(
+        (product: Product) =>
+          product.collections.nodes.some(
+            (collectionNode: any) => collectionNode.title === category,
+          ),
+      ).length;
+      return { category, productCount };
+    });
   } else {
     // Fetch all products
     productsData = await getProducts({ sortKey, reverse, cursor });
   }
-
+  // console.log(categoriesWithCounts)
   const categories = await getCollections();
   const vendors = await getVendors({});
 
@@ -147,6 +151,7 @@ const ShowProducts = async ({
         tags={tags}
         maxPriceData={maxPriceData}
         vendorsWithCounts={vendorsWithCounts}
+        categoriesWithCounts={categoriesWithCounts}
       />
 
       <div className="container">
@@ -158,6 +163,7 @@ const ShowProducts = async ({
               tags={tags}
               maxPriceData={maxPriceData!}
               vendorsWithCounts={vendorsWithCounts}
+              categoriesWithCounts={categoriesWithCounts}
             />
           </div>
 

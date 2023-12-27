@@ -1,4 +1,5 @@
 import SeoMeta from "@/partials/SeoMeta";
+import Link from "next/link";
 
 const NotFound = async () => {
   return (
@@ -11,12 +12,16 @@ const NotFound = async () => {
               <span className="text-[8rem] block font-bold text-dark dark:text-darkmode-dark">
                 404
               </span>
-              <h1 className="h2 mb-4">Opps Page not found!</h1>
+              <h1 className="h2 mb-4">Page not found</h1>
               <div className="content">
+                <p>
+                  The page you are looking for might have been removed, had its
+                  name changed, or is temporarily unavailable.
+                </p>
               </div>
-              <a href="/" className="btn btn-primary mt-8">
-                Back to home page
-              </a>
+              <Link href="/" className="btn btn-primary mt-8">
+                Back to home
+              </Link>
             </div>
           </div>
         </div>

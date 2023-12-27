@@ -5,17 +5,19 @@ import MultiRangeSlider from "multi-range-slider-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import "./rangeSlider.css";
-import { currencyCode, currencySymbol } from "@/lib/constants";
+import config from "@/config/config.json";
 
 const RangeSlider = ({
   maxPriceData,
 }: {
   maxPriceData: { amount: string; currencyCode: string };
 }) => {
-  const [minValue, setMinValue] = useState(0);
-  const [maxValue, setMaxValue] = useState(0);
+  const { currencyCode, currencySymbol } = config.shopify;
+
+  // const [minValue, setMinValue] = useState(0);
+  // const [maxValue, setMaxValue] = useState(0);
   const [minValue2, setMinValue2] = useState(0);
-  const [maxValue2, setMaxValue2] = useState(1000);
+  const [maxValue2, setMaxValue2] = useState(parseInt(maxPriceData?.amount));
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -36,10 +38,12 @@ const RangeSlider = ({
     <div>
       <div className="flex justify-between">
         <p>
-          {currencySymbol}{minValue2} {maxPriceData.currencyCode || currencyCode}
+          {currencySymbol}
+          {minValue2} {maxPriceData?.currencyCode || currencyCode}
         </p>
         <p>
-        {currencySymbol}{maxValue2} {maxPriceData.currencyCode || currencyCode}
+          {currencySymbol}
+          {maxValue2} {maxPriceData?.currencyCode || currencyCode}
         </p>
       </div>
 
@@ -50,25 +54,37 @@ const RangeSlider = ({
         min="0"
         max={`${maxPriceData?.amount}`}
         minValue={getMinPrice! || 0}
-        maxValue={getMaxPrice! || 1000}
+        maxValue={getMaxPrice! || parseInt(maxPriceData?.amount)}
         onInput={(e) => {
           setMinValue2(e.minValue);
           setMaxValue2(e.maxValue);
         }}
       />
 
-      <button
-        className={`btn btn-sm btn-primary w-full transition-opacity duration-300 ${
-          minValue2 === 0 && maxValue2 === 1000
-            ? "opacity-0 pointer-events-none"
-            : "opacity-100 pointer-events-auto"
-        }`}
-        onClick={() => {
-          priceChange(minValue2, maxValue2);
-        }}
-      >
-        submit
-      </button>
+      {/* {
+        minValue2 === 0 && maxValue2 === parseInt(maxPriceData?.amount) ||
+        <button
+          className={`btn btn-sm btn-primary w-full`}
+          onClick={() => {
+            priceChange(minValue2, maxValue2);
+          }}
+        >
+          submit
+        </button>
+      } */}
+
+      {(minValue2 === parseInt(getMinPrice!) &&
+        maxValue2 === parseInt(getMaxPrice!)) ||
+        (minValue2 === 0 && maxValue2 === parseInt(maxPriceData?.amount)) || (
+          <button
+            className={`btn btn-sm btn-primary w-full`}
+            onClick={() => {
+              priceChange(minValue2, maxValue2);
+            }}
+          >
+            submit
+          </button>
+        )}
     </div>
   );
 };

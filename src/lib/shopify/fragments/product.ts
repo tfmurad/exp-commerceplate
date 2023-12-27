@@ -67,6 +67,19 @@ const productFragment = /* GraphQL */ `
     tags
     updatedAt
     vendor
+    collections(first: 100) {
+      nodes {
+        title
+        products(first: 100) {
+          edges {
+            node {
+              title
+              vendor
+            }
+          }
+        }
+      }
+    }
   }
   ${imageFragment}
   ${seoFragment}

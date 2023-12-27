@@ -16,18 +16,17 @@ const SearchBar = ({
   const router = useRouter();
   const searchParams = useSearchParams();
   const { getCollapseProps, getToggleProps, isExpanded, setExpanded } =
-    useCollapse();
+    useCollapse({
+      hasDisabledAnimation: true,
+    });
 
   useEffect(() => {
     const inputField = document.getElementById(
       "searchInputBar",
     ) as HTMLInputElement;
-    if (inputField && searchParams.get("q")) {
+    if (inputField || searchParams.get("q")) {
       inputField.focus();
     }
-  }, [searchParams]);
-
-  useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
       if (
@@ -44,13 +43,12 @@ const SearchBar = ({
     return () => {
       document.removeEventListener("click", handleOutsideClick);
     };
-  }, [isExpanded, setExpanded]);
-
+  }, [isExpanded, setExpanded, searchParams]);
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setExpanded(false);
-    
+
     const val = e.target as HTMLFormElement;
     const search = val.search as HTMLInputElement;
     const newParams = new URLSearchParams(searchParams.toString());
@@ -66,11 +64,14 @@ const SearchBar = ({
 
   return (
     <div className="flex items-center">
-      <button className="search-button-class search-icon mr-4 md:mr-6" {...getToggleProps()}>
+      <button
+        className="search-button-class search-icon mr-4 md:mr-6 z-20"
+        {...getToggleProps()}
+      >
         {isExpanded ? <TbZoomCancel size={20} /> : <IoSearch size={20} />}
       </button>
-      <section
-        className="collapse-bar-class w-full absolute top-[56px] lg:top-[74px] left-0"
+      <div
+        className="collapse-bar-class w-full absolute top-[56px] max-lg:left-0 lg:top-1 lg:w-52 lg:right-[180px]"
         {...getCollapseProps()}
       >
         <div className="container">
@@ -79,20 +80,20 @@ const SearchBar = ({
               <input
                 id="searchInputBar"
                 key={searchParams?.get("q")}
-                type="text"
+                type="search"
                 name="search"
-                placeholder="Search for products"
+                placeholder="Search"
                 autoComplete="off"
                 defaultValue={searchParams?.get("q") || ""}
-                className="w-full bg-theme-light px-3 py-2 md:px-6 md:py-4 text-dark placeholder:text-light focus:ring-transparent border-none dark:bg-darkmode-theme-light dark:text-darkmode-light"
+                className="w-full rounded-s-md lg:rounded-md bg-light dark:bg-darkmode-light px-3 py-2 text-darkmode-dark dark:text-dark placeholder:text-darkmode-dark dark:placeholder:text-light focus:ring-transparent border-none search-input"
               />
-              <button className="rounded-none btn btn-sm md:btn-md btn-primary cursor-pointer bg-theme-light dark:bg-darkmode-theme-light border-none text-dark dark:text-darkmode-light">
+              <button className="lg:hidden rounded-e-md lg:rounded-none px-2 cursor-pointer text-darkmode-dark dark:text-dark bg-light dark:bg-darkmode-light border-none">
                 <IoSearch size={25} />
               </button>
             </form>
           </div>
         </div>
-      </section>
+      </div>
     </div>
   );
 };

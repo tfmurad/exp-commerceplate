@@ -14,16 +14,16 @@ We collect certain identifying personal data when you sign up to our Service suc
 collect non-identifying information from you, such as referring URL, browser, operating system, cookie information, and Internet Service Provider. Without a subpoena, voluntary compliance on the part of your Internet Service Provider, or additional records from a third party, this information alone cannot usually be used to identify you.The term "personal data" does not include any anonymized and aggregated data made on the basis of personal data, which are wholly owned by Conclude.
 <br/>
 
-#### About CommercePlate
+#### About Commerceplate
 
-#### Service Provided As:
+#### Service Provided As
 
 The discovery was made by Richard McClintock , a professor of Latin at Hampden-Sydney College in Virginia, who faced the impetuous recurrence of the dark word consectetur in the text Lorem ipsum researched its origins to identify them in sections 1.10.32 and 1.10.33 of the aforementioned Cicero's
 
 When referring to Lorem ipsum, different expressions are used, namely fill text , fictitious text , blind text or placeholder text : in short, its meaning can also be zero, but its usefulness is so clear as to go
 <br/>
 
-#### Company Liability:
+#### Company Liability
 
 The choice of font and font size with which Lorem ipsum is reproduced answers to specific needs that go beyond the simple and simple filling of spaces dedicated to accepting real texts and allowing to have hands an advertising/publishing product, both web and paper, true to reality.
 
@@ -39,7 +39,7 @@ In order to use our Service, you must meet a number of conditions, including but
 - Send emails about our Site or respond to inquiries.
 - Including news and requests for agreement to amended legal documents such as this
   Privacy Policy and our Terms of Service.
-<br/>
+  <br/>
 
 #### Why we collect and use personal data
 
@@ -50,7 +50,7 @@ Users of Conclude (i) must keep passwords secure and confidential; (ii) are sole
 - Send emails about our Site or respond to inquiries.
 - Including news and requests for agreement to amended legal documents such as this
   Privacy Policy and our Terms of Service.
-<br/>
+  <br/>
 
 #### Type of personal data collected
 

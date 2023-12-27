@@ -10,7 +10,16 @@ const About = () => {
   const data: RegularPage = getListPage("about/_index.md");
 
   const { frontmatter } = data;
-  const { title, about_us, faq_section_title, faq_section_subtitle, faqs, testimonials_section_enable, testimonials_section_title, testimonials } = frontmatter;
+  const {
+    title,
+    about_us,
+    faq_section_title,
+    faq_section_subtitle,
+    faqs,
+    testimonials_section_enable,
+    testimonials_section_title,
+    testimonials,
+  } = frontmatter;
 
   return (
     <>
@@ -70,10 +79,12 @@ const About = () => {
         </div>
       </section>
 
-      {
-        testimonials_section_enable &&
-        <Testimonials title={testimonials_section_title!} testimonials={testimonials!} />
-      }
+      {testimonials_section_enable && (
+        <Testimonials
+          title={testimonials_section_title!}
+          testimonials={testimonials!}
+        />
+      )}
 
       <section>
         <div className="container">
@@ -137,7 +148,10 @@ const About = () => {
           <div className="bg-theme-light px-7 lg:px-32 py-20 dark:bg-darkmode-theme-light row mb-14 xl:mb-28 rounded-b-md">
             <div className="col-12 md:col-5 mx-auto space-y-5 mb-10 md:mb-0">
               <h1 dangerouslySetInnerHTML={markdownify(faq_section_title!)} />
-              <p dangerouslySetInnerHTML={markdownify(faq_section_subtitle!)} className="md:text-lg" />
+              <p
+                dangerouslySetInnerHTML={markdownify(faq_section_subtitle!)}
+                className="md:text-lg"
+              />
             </div>
 
             <div className="col-12 md:col-7">

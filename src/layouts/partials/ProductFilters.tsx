@@ -14,39 +14,20 @@ const ProductFilters = ({
   tags,
   maxPriceData,
   vendorsWithCounts,
+  categoriesWithCounts,
 }: {
   categories: ShopifyCollection[];
   vendors: { vendor: string; productCount: number }[];
   tags: string[];
   maxPriceData: { amount: string; currencyCode: string };
   vendorsWithCounts: { vendor: string; productCount: number }[];
+  categoriesWithCounts: { category: string; productCount: number }[];
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const selectedBrands = searchParams.getAll("b");
   const selectedCategory = searchParams.get("c");
-
-  console.log("------>", vendorsWithCounts, "<------");
-
-  // console.log(vendors)
-  // const sizes = [
-  //   {
-  //     id: "H40E27",
-  //     height: 40,
-  //     bulbSize: 27,
-  //   },
-  //   {
-  //     id: "H35E14",
-  //     height: 35,
-  //     bulbSize: 14,
-  //   },
-  //   {
-  //     id: "H150E25",
-  //     height: 150,
-  //     bulbSize: 25,
-  //   },
-  // ];
 
   const handleBrandClick = (name: string) => {
     const slugName = slugify(name.toLowerCase());
@@ -73,63 +54,44 @@ const ProductFilters = ({
     router.push(createUrl("/products", newParams), { scroll: false });
   };
 
-  // removing the states for using in the style class
-  // const cRemove = searchParams.get('c');
-  // const bRemove = searchParams.get('b');
-  // useEffect(() => {
-  //   if (!cRemove) {
-  //     setSelectedCategory(null);
-  //   }
-  //   if (!bRemove) {
-  //     setSelectedBrand(null);
-  //   }
-  // }, [cRemove, bRemove])
-
   return (
     <div className="py-4 lg:py-10">
       <div>
         <h5 className="mb-2 lg:text-xl">Select Price Range</h5>
         <hr className="dark:border-darkmode-border" />
-        <div className="py-4">
+        <div className="pt-4">
           <RangeSlider maxPriceData={maxPriceData} />
         </div>
       </div>
 
-      {/* <div>
-        <h5 className="mb-2 mt-8 lg:mt-10 lg:text-xl">Product Categories</h5>
-        <hr />
-        <ul className="mt-4 space-y-4">
-          {categories &&
-            categories.map((category) => (
-              <CollectionItem
-                key={category.handle}
-                title={category.title}
-                path={category.path || ""}
-                productCount={category.products?.edges.length}
-              />
-            ))}
-        </ul>
-      </div> */}
-
       <div>
-        <h5 className="mb-2 lg:text-xl">Product Categories</h5>
+        <h5 className="mb-2 mt-4 lg:mt-6 lg:text-xl">Product Categories</h5>
         <hr className="dark:border-darkmode-border" />
         <ul className="mt-4 space-y-4">
           {categories.map((category) => (
             <li
               key={category.handle}
-              className={`flex items-center justify-between text-light dark:text-darkmode-light cursor-pointer ${selectedCategory === category.handle
-                ? "text-dark dark:text-darkmode-light font-semibold"
-                : ""
-                }`}
+              className={`flex items-center justify-between cursor-pointer ${
+                selectedCategory === category.handle
+                  ? "text-dark dark:text-darkmode-dark font-semibold"
+                  : "text-light dark:text-darkmode-light"
+              }`}
               onClick={() => handleCategoryClick(category.handle)}
             >
               {category.title}{" "}
-              <span>
-                {category?.products?.edges.length! > 0
-                  ? `(${category?.products?.edges.length!})`
-                  : ""}
-              </span>
+              {searchParams.has("c") && !searchParams.has("b") ? (
+                <span>({category?.products?.edges.length!})</span>
+              ) : (
+                <span>
+                  {categoriesWithCounts.length > 0
+                    ? `(${
+                        categoriesWithCounts.find(
+                          (c) => c.category === category.title,
+                        )?.productCount || 0
+                      })`
+                    : `(${category?.products?.edges.length!})`}
+                </span>
+              )}
             </li>
           ))}
         </ul>
@@ -146,13 +108,26 @@ const ProductFilters = ({
                 className={`flex items-center justify-between cursor-pointer text-light dark:text-darkmode-light`}
                 onClick={() => handleBrandClick(vendor.vendor)}
               >
-                <span>
-                  {vendorsWithCounts.length > 0 ? (
-                    `${vendor.vendor} (${vendorsWithCounts.find((v) => v.vendor === vendor.vendor)?.productCount || 0})`
-                  ) : (
-                   `${vendor.vendor} (${vendor.productCount})`
-                  )}
-                </span>
+                {searchParams.has("b") &&
+                !searchParams.has("c") &&
+                !searchParams.has("minPrice") &&
+                !searchParams.has("maxPrice") &&
+                !searchParams.has("q") &&
+                !searchParams.has("t") ? (
+                  <span>
+                    {vendor.vendor} ({vendor.productCount})
+                  </span>
+                ) : (
+                  <span>
+                    {vendorsWithCounts.length > 0
+                      ? `${vendor.vendor} (${
+                          vendorsWithCounts.find(
+                            (v) => v.vendor === vendor.vendor,
+                          )?.productCount || 0
+                        })`
+                      : `${vendor.vendor} (${vendor.productCount})`}
+                  </span>
+                )}
                 <div className="h-4 w-4 rounded-sm flex items-center justify-center border border-light dark:border-darkmode-light">
                   {selectedBrands.map((b, i) =>
                     slugify(vendor.vendor.toLowerCase()) === b ? (
@@ -168,52 +143,10 @@ const ProductFilters = ({
         </div>
       )}
 
-      {/* <div>
-        <h5 className="mb-2 mt-8 lg:mt-10 lg:text-xl">Frame Color</h5>
-        <hr />
-        <FrameColor />
-      </div>
-
-      <div>
-        <h5 className="mb-2 mt-8 lg:mt-10 lg:text-xl">Size</h5>
-        <hr />
-        <ul className="mt-4 space-y-4">
-          {sizes.map((item) => (
-            <li
-              key={item.id}
-              className={`flex items-center justify-between cursor-pointer text-light dark:text-darkmode-light`}
-              onClick={() => handleSizeClick(item.id)}
-            >
-              <span>
-                Height {item.height}cm, Bulb E{item.bulbSize}
-              </span>
-              <div className="h-4 w-4 rounded-sm flex items-center justify-center border border-light dark:border-darkmode-light">
-                {selectedSize === item.id && (
-                  <span>
-                    <BsCheckLg size={16} />
-                  </span>
-                )}
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div> */}
-
       {tags.length > 0 && (
         <div>
           <h5 className="mb-2 mt-8 lg:mt-10 lg:text-xl">Tags</h5>
           <hr className="dark:border-darkmode-border" />
-          {/* <button className="flex flex-wrap gap-3 mt-4">
-            {tags.map((tag: string) => (
-              <p
-                key={tag}
-                className="px-2 py-1 rounded-md border text-light dark:text-darkmode-light"
-                onClick={() => handleTagClick(tag)}
-              >
-                {tag}
-              </p>
-            ))}
-          </button> */}
           <div className="mt-4">
             <ShowTags tags={tags} />
           </div>

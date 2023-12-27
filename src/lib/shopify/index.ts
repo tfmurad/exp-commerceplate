@@ -1,14 +1,14 @@
 "use server";
-import { revalidateTag } from "next/cache";
-import { headers } from "next/headers";
-import { NextRequest, NextResponse } from "next/server";
 import {
   HIDDEN_PRODUCT_TAG,
   SHOPIFY_GRAPHQL_API_ENDPOINT,
   TAGS,
-} from "../../lib/constants";
-import { isShopifyError } from "../../lib/type-guards";
-import { ensureStartsWith } from "../../lib/utils";
+} from "@/lib/constants";
+import { isShopifyError } from "@/lib/typeGuards";
+import { ensureStartsWith } from "@/lib/utils";
+import { revalidateTag } from "next/cache";
+import { headers } from "next/headers";
+import { NextRequest, NextResponse } from "next/server";
 import {
   addToCartMutation,
   createCartMutation,
@@ -78,7 +78,7 @@ type ExtractVariables<T> = T extends { variables: object }
   : never;
 
 export async function shopifyFetch<T>({
-  cache = "force-cache",
+  cache = "no-store",
   headers,
   query,
   tags,
@@ -357,6 +357,55 @@ export async function getCollectionProducts({
   };
 }
 
+// export async function getCollectionProducts({
+//   collection,
+//   reverse,
+//   sortKey,
+//   filterCategoryProduct,
+// }: {
+//   collection: string;
+//   reverse?: boolean;
+//   sortKey?: string;
+//   filterCategoryProduct?: any[]; // Update the type based on your GraphQL schema
+// }): Promise<{ pageInfo: PageInfo | null; products: Product[] }> {
+//   const res = await shopifyFetch<ShopifyCollectionProductsOperation>({
+//     query: getCollectionProductsQuery,
+//     tags: [TAGS.collections, TAGS.products],
+//     variables: {
+//       handle: collection,
+//       reverse,
+//       sortKey: sortKey === "CREATED_AT" ? "CREATED" : sortKey,
+//       filterCategoryProduct, // Pass the filters variable to the query
+//     } as {
+//       handle: string;
+//       reverse?: boolean;
+//       sortKey?: string;
+//       filterCategoryProduct?: any[];
+//     },
+//   });
+
+//   if (!res.body.data.collection) {
+//     // console.log(`No collection found for \`${collection}\``);
+//     return { pageInfo: null, products: [] };
+//   }
+
+//   const pageInfo = res.body.data?.collection?.products?.pageInfo;
+//   let products = reshapeProducts(removeEdgesAndNodes(res.body.data.collection.products));
+
+//   // Filter out products from collections starting with "hidden-"
+//   products = products.filter(product => 
+//     !product.collections.nodes.some((collection: any) => 
+//       collection.title.startsWith('hidden-')
+//     )
+//   );
+
+//   return {
+//     pageInfo,
+//     products,
+//   };
+// }
+
+
 export async function createCustomer(input: CustomerInput): Promise<any> {
   const res = await shopifyFetch<registerOperation>({
     query: createCustomerMutation,
@@ -424,7 +473,7 @@ export async function getCollections(): Promise<Collection[]> {
     // Filter out the `hidden` collections.
     // Collections that start with `hidden-*` need to be hidden on the search page.
     ...reshapeCollections(shopifyCollections).filter(
-      (collection) => !collection.handle.startsWith("hidden"),
+      (collection) => !collection.handle.startsWith("hidden-"),
     ),
   ];
 
@@ -494,6 +543,52 @@ export async function getProductRecommendations(
   return reshapeProducts(res.body.data.productRecommendations);
 }
 
+// export async function getVendors({
+//   query,
+//   reverse,
+//   sortKey,
+// }: {
+//   query?: string;
+//   reverse?: boolean;
+//   sortKey?: string;
+// }): Promise<{ vendor: string; productCount: number }[]> {
+//   const res = await shopifyFetch<ShopifyProductsOperation>({
+//     query: getVendorsQuery,
+//     tags: [TAGS.products],
+//     variables: {
+//       query,
+//       reverse,
+//       sortKey,
+//     },
+//   });
+
+//   const products = removeEdgesAndNodes(res.body.data.products);
+
+//   // Create an array to store objects with vendor names and product counts
+//   const vendorProductCounts: { vendor: string; productCount: number }[] = [];
+
+//   // Process the products and count them by vendor
+//   products.forEach((product) => {
+//     const vendor = product.vendor;
+//     if (vendor) {
+//       // Check if the vendor is already in the array
+//       const existingVendor = vendorProductCounts.find(
+//         (v) => v.vendor === vendor,
+//       );
+
+//       if (existingVendor) {
+//         // Increment the product count for the existing vendor
+//         existingVendor.productCount++;
+//       } else {
+//         // Add a new vendor entry
+//         vendorProductCounts.push({ vendor, productCount: 1 });
+//       }
+//     }
+//   });
+
+//   return vendorProductCounts;
+// }
+
 export async function getVendors({
   query,
   reverse,
@@ -515,11 +610,24 @@ export async function getVendors({
 
   const products = removeEdgesAndNodes(res.body.data.products);
 
+  // Filter out products from collections starting with "hidden-"
+  const filteredProducts = products.filter(product => {
+    // Check if 'collections' and 'collections.edges' exist and have items
+    if (product.collections && Array.isArray(product.collections.edges) && product.collections.edges.length > 0) {
+      // Convert edges to nodes and check the title
+      return !product.collections.edges.some((edge:any) => 
+        edge.node.title.startsWith('hidden-')
+      );
+    }
+    // Include the product if 'collections.edges' is not defined or empty
+    return true;
+  });
+
   // Create an array to store objects with vendor names and product counts
   const vendorProductCounts: { vendor: string; productCount: number }[] = [];
 
-  // Process the products and count them by vendor
-  products.forEach((product) => {
+  // Process the filtered products and count them by vendor
+  filteredProducts.forEach((product) => {
     const vendor = product.vendor;
     if (vendor) {
       // Check if the vendor is already in the array
@@ -539,6 +647,10 @@ export async function getVendors({
 
   return vendorProductCounts;
 }
+
+
+
+
 
 export async function getTags({
   query,
@@ -562,6 +674,36 @@ export async function getTags({
   return reshapeProducts(removeEdgesAndNodes(res.body.data.products));
 }
 
+// export async function getProducts({
+//   query,
+//   reverse,
+//   sortKey,
+//   cursor,
+// }: {
+//   query?: string;
+//   reverse?: boolean;
+//   sortKey?: string;
+//   cursor?: string;
+// }): Promise<{ pageInfo: PageInfo; products: Product[] }> {
+//   const res = await shopifyFetch<ShopifyProductsOperation>({
+//     query: getProductsQuery,
+//     tags: [TAGS.products],
+//     variables: {
+//       query,
+//       reverse,
+//       sortKey,
+//       cursor,
+//     },
+//   });
+
+//   const pageInfo = res.body.data?.products?.pageInfo;
+
+//   return {
+//     pageInfo,
+//     products: reshapeProducts(removeEdgesAndNodes(res.body.data.products)),
+//   };
+// }
+
 export async function getProducts({
   query,
   reverse,
@@ -582,14 +724,22 @@ export async function getProducts({
       sortKey,
       cursor,
     },
-    cache: "force-cache",
   });
 
   const pageInfo = res.body.data?.products?.pageInfo;
 
+  let reshapedProducts = reshapeProducts(removeEdgesAndNodes(res.body.data.products));
+  
+  // Filter out products from collections that start with "hidden-"
+  let filteredProducts = reshapedProducts.filter(product => 
+    !product.collections.nodes.some((collection: any) => 
+      collection.title.startsWith('hidden-')
+    )
+  );
+
   return {
     pageInfo,
-    products: reshapeProducts(removeEdgesAndNodes(res.body.data.products)),
+    products: filteredProducts,
   };
 }
 
@@ -600,7 +750,6 @@ export async function getHighestProductPrice(): Promise<{
   try {
     const res = await shopifyFetch<any>({
       query: getHighestProductPriceQuery,
-      cache: "force-cache",
     });
 
     // Extract and return the relevant data
@@ -633,7 +782,7 @@ export async function revalidate(req: NextRequest): Promise<NextResponse> {
   const isCollectionUpdate = collectionWebhooks.includes(topic);
   const isProductUpdate = productWebhooks.includes(topic);
 
-  if (!secret || secret !== process.env.SHOPIFY_REVALIDATION_SECRET) {
+  if (!secret || secret !== process.env.SHOPIFY_API_SECRET_KEY) {
     console.error("Invalid revalidation secret.");
     return NextResponse.json({ status: 200 });
   }

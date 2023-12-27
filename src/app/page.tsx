@@ -1,37 +1,38 @@
 /* eslint-disable react/no-unescaped-entities */
-import CategoriesSlider from "@/components/CategoriesSlider";
+import CollectionsSlider from "@/components/CollectionsSlider";
 import HeroSlider from "@/components/HeroSlider";
-import LoadingCategory from "@/components/loading/LoadingCategory";
-import LoadingLatestProducts from "@/components/loading/LoadingLatestProducts";
+import SkeletonCategory from "@/components/skeleton/SkeletonCategory";
+import SkeletonFeaturedProducts from "@/components/skeleton/SkeletonFeaturedProducts";
+import config from "@/config/config.json";
 import { getListPage } from "@/lib/contentParser";
 import { getCollectionProducts, getCollections } from "@/lib/shopify";
 import CallToAction from "@/partials/CallToAction";
-import LatestProducts from "@/partials/LatestProducts";
+import FeaturedProducts from "@/partials/FeaturedProducts";
 import SeoMeta from "@/partials/SeoMeta";
 import { Suspense } from "react";
 
+const { collections } = config.shopify;
+
 const ShowHeroSlider = async () => {
-  const sliderImages = await getCollectionProducts({ collection: "hidden-homepage-carousel" });
+  const sliderImages = await getCollectionProducts({
+    collection: collections.hero_slider,
+  });
   const { products } = sliderImages;
-  return <HeroSlider products={products} />
-}
+  return <HeroSlider products={products} />;
+};
 
+const ShowCollections = async () => {
+  const collections = await getCollections();
+  return <CollectionsSlider collections={collections} />;
+};
 
-// const ShowCategories = async () => {
-//   const categories = await getCollections();
-//   return <CategoriesSlider categories={categories} />
-// }
-
-const ShowCategories = async () => {
-  const categories = await getCollections();
-  return <CategoriesSlider categories={categories} />
-}
-
-
-const ShowLatestProducts = async () => {
-  const { pageInfo, products } = await getCollectionProducts({ collection: "latest-products", reverse: false });
-  return <LatestProducts products={products} />
-}
+const ShowFeaturedProducts = async () => {
+  const { pageInfo, products } = await getCollectionProducts({
+    collection: collections.featured_products,
+    reverse: false,
+  });
+  return <FeaturedProducts products={products} />;
+};
 
 const Home = () => {
   const callToAction = getListPage("sections/call-to-action.md");
@@ -53,27 +54,24 @@ const Home = () => {
       <section className="section">
         <div className="container">
           <div className="text-center mb-6 md:mb-14">
-            <h2>Categories</h2>
+            <h2>Collections</h2>
           </div>
-          <Suspense
-            fallback={<LoadingCategory />}>
+          <Suspense fallback={<SkeletonCategory />}>
             {/* @ts-ignore */}
-            <ShowCategories />
+            <ShowCollections />
           </Suspense>
         </div>
       </section>
 
-      {/* Latest Products section  */}
+      {/* Featured Products section  */}
       <section>
         <div className="container">
           <div className="text-center mb-6 md:mb-14">
-            <h2 className="mb-2">Latest Products</h2>
-            <p className="md:h5">Don't Miss Today's Latest Deals</p>
+            <h2 className="mb-2">Featured Products</h2>
+            <p className="md:h5">Explore Today's Featured Picks!</p>
           </div>
-          {/* <LatestProducts products={latestProducts} /> */}
-          <Suspense
-            fallback={<LoadingLatestProducts />}>
-            <ShowLatestProducts />
+          <Suspense fallback={<SkeletonFeaturedProducts />}>
+            <ShowFeaturedProducts />
           </Suspense>
         </div>
       </section>

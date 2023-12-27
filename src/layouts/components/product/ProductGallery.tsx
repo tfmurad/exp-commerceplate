@@ -16,7 +16,7 @@ import "swiper/css/navigation";
 import "swiper/css/thumbs";
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import LoadingProductThumb from "../loading/LoadingProductThumb";
+import LoadingProductThumb from "../skeleton/SkeletonProductThumb";
 
 export interface ImageItem {
   url: string;
@@ -30,6 +30,8 @@ const ProductGallery = ({ images }: { images: ImageItem[] }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [loadingThumb, setLoadingThumb] = useState(true);
+  // const [picUrl, setPicUrl] = useState(images.length > 0 ? images[0].url : "");
+  const [picUrl, setPicUrl] = useState("");
 
   const searchParams = useSearchParams().get("color");
 
@@ -52,17 +54,8 @@ const ProductGallery = ({ images }: { images: ImageItem[] }) => {
 
   const handleSlideChange = (swiper: TSwiper) => {
     setActiveIndex(swiper.activeIndex);
+    setPicUrl(filteredImages[swiper.activeIndex].url);
   };
-
-  // useEffect(() => {
-
-  //   if (searchParams) {
-  //     const index = altTextArray.findIndex(alt => alt === searchParams)
-  //     setActiveIndex(index);
-  //     console.log({ searchParams, altTextArray, index })
-  //   }
-
-  // }, [searchParams]);
 
   const handleThumbSlideClick = (clickedUrl: string) => {
     const foundIndex = filteredImages.findIndex(
@@ -99,6 +92,7 @@ const ProductGallery = ({ images }: { images: ImageItem[] }) => {
                 zoomSrc={item.url}
                 width={722}
                 height={623}
+                zoomType={"hover"}
                 className="mb-6 border rounded-md max-h-[623px]"
               />
             </SwiperSlide>
@@ -133,13 +127,13 @@ const ProductGallery = ({ images }: { images: ImageItem[] }) => {
         watchSlidesProgress={true}
         modules={[FreeMode, Navigation, Thumbs]}
       >
-        {filteredImages.map((item: any, index: number) => (
+        {filteredImages.map((item: any) => (
           <SwiperSlide key={item.url}>
             <div
               onClick={() => handleThumbSlideClick(item.url)}
               className={`rounded-md border cursor-pointer overflow-hidden ${
-                filteredImages[activeIndex]?.url === item.url
-                  ? "border border-primary dark:border-blue-500"
+                picUrl === item.url
+                  ? "border border-darkmode-border dark:border-yellow-500"
                   : ""
               }`}
             >

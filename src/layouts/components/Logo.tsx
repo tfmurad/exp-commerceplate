@@ -32,16 +32,12 @@ const Logo = ({ src }: { src?: string }) => {
     mounted && (theme === "dark" || resolvedTheme === "dark")
       ? logo_darkmode
       : logo;
-
   const logoPath = src ? src : resolvedLogo;
-
-
 
   return (
     <Link href="/" className="navbar-brand inline-block">
       {logoPath ? (
-       <div className="flex gap-1 items-center">
-         <Image
+        <Image
           width={logo_width.replace("px", "") * 2}
           height={logo_height.replace("px", "") * 2}
           src={logoPath}
@@ -52,8 +48,6 @@ const Logo = ({ src }: { src?: string }) => {
             width: logo_width.replace("px", "") + "px",
           }}
         />
-        <span className="tracking-tight max-sm:hidden">{logo_text}</span>
-       </div>
       ) : logo_text ? (
         logo_text
       ) : (
